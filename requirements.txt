@@ -1,0 +1,11 @@
+#pip freeze: all the packages installed
+#then on your terminal do: 
+pip freeze > requirements.txt
+
+#beautifulsoop library
+sudo apt-get install python3-bs4
+#pandas library
+sudo apt-get install python3-pandas
+
+# setuptools
+pip3 install setuptools
