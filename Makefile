@@ -3,8 +3,8 @@ run:
 	python main.py
 	python webscraping.py
 
-install: requirements.txt
-	pip install -r requirements.txt
+install: utils/requirements.txt
+	pip install -r utils/requirements.txt
 
 build: setup.py
 	python setup.py build bdist_wheel
@@ -19,8 +19,8 @@ run:
 	python3 main.py
 	python3 webscraping.py 
 
-install: requirements.txt
-	pip3 install -r requirements.txt
+install: utils/requirements.txt
+	pip3 install -r utils/requirements.txt
 
 build: setup.py
 	python3 setup.py build bdist_wheel

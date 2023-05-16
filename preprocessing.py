@@ -38,8 +38,7 @@ df = df.applymap(lambda x: remove_parasite_chars(x) if isinstance(x, str) else x
 
 def df_to_csv(df: pd.DataFrame, folder: str, filename: str):
     try:
-        tz = pytz.timezone('Europe/Paris')
-        timestamp = datetime.now(tz).strftime("%Y%m%d%H%M")
+        timestamp = datetime.now(pytz.timezone('Europe/Paris')).strftime("%Y%m%d%H%M")
         file_path = f'./{folder}/{filename}_{timestamp}.csv'
         df.to_csv(file_path, index=False)
         print("CSV file successfully created.")
