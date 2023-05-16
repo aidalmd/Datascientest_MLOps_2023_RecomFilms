@@ -1,11 +1,74 @@
-from urllib.request import urlopen
+import requests
 from bs4 import BeautifulSoup as bs
-from bs4 import UnicodeDammit 
-import pandas as pd
 
-from config import URL
+from utils.config import URL
 
-site_url = URL
-page = urlopen(site_url)
-soup = bs(page, "html.parser")
+def scrape_allocine_films(base_url=URL) -> list:
+    """
+    Scrapes film details from the Allociné website.
+    Returns a list of dictionaries containing the film information.
+    """
 
+    # Initialize the list
+    films = []
+    # Send a GET request to the page
+    response = requests.get(base_url)
+    soup = bs(response.content, 'html.parser')
+
+    # Find the number of pages
+    pagination = soup.find('div', class_='pagination-item-holder').find_all('a')
+    total_pages = int(pagination[-1].text)
+
+
+    for page in range(1, total_pages + 1):
+
+      # Create the URL for each page
+      url = f'{base_url}?page={page}'
+      response = requests.get(url)
+      soup = bs(response.content, 'html.parser')
+
+      # Find all the film items on the page
+      film_items = soup.find_all('li', class_='mdl')
+
+
+      for film_item in film_items:
+          # Extract the film details
+          rank_elem = film_item.find('div', class_='label-ranking')
+          rank = rank_elem.text.strip() if rank_elem is not None else ''
+
+          title = film_item.find('h2', class_='meta-title').text.strip()
+
+          duration_elem =  duration = film_item.find('div', class_='meta-body-item meta-body-info')
+          duration_with_genres = duration_elem.text.strip() if duration_elem is not None else ''
+          duration_parts = duration_with_genres.split('/', maxsplit=1)
+          duration = duration_parts[0].strip() if duration_parts else ''
+          
+          genres = duration_parts[1].strip() if len(duration_parts) > 1 else ''
+
+          director_elem = film_item.find('div', class_='meta-body-item meta-body-direction')
+          director = director_elem.text.strip() if director_elem is not None else ''
+
+          cast_elem = film_item.find('div', class_='meta-body-item meta-body-actor')
+          cast = cast_elem.text.strip() if cast_elem is not None else ''
+
+          synopsis = film_item.find('div', class_='synopsis').text.strip()
+
+          rating_elem = film_item.find('span', class_='stareval-note')
+          rating = rating_elem.text.strip().replace(',', '.') if rating_elem is not None else ''    
+
+          # Create a dictionary for the film
+          film = {
+              'rank': rank,
+              'title': title,
+              'duration': duration,
+              'genres': genres,
+              'director': director,
+              'cast': cast,
+              'synopsis': synopsis,
+              'rating': rating
+          }
+
+          # Add the film to the list
+          films.append(film)
+
+    return films
