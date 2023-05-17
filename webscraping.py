@@ -1,7 +1,10 @@
 import requests
+import pandas as pd
+import pytz
+from datetime import datetime
 from bs4 import BeautifulSoup as bs
 
-from utils.config import URL
+from utils.config import URL, FOLDER_LIVE_DATA
 
 def scrape_allocine_films(base_url=URL) -> list:
     """
@@ -72,3 +75,27 @@ def scrape_allocine_films(base_url=URL) -> list:
           films.append(film)
 
     return films
+
+films = scrape_allocine_films(base_url=URL)
+
+def list_to_df(List: list) -> pd.DataFrame:
+    try:
+        df = pd.DataFrame(List)
+        print("DataFrame successfully created.")
+        return df
+    except Exception as e:
+        print(f"Error occurred while creating the DataFrame: {str(e)}")
+        return pd.DataFrame()  # Return an empty DataFrame in case of an error
+
+df = list_to_df(films)
+
+def df_to_csv(df: pd.DataFrame, filename: str):
+    try:
+        timestamp = datetime.now(pytz.timezone('Europe/Paris')).strftime("%Y%m%d%H%M")
+        file_path = f'{FOLDER_LIVE_DATA}/{filename}_{timestamp}.csv'
+        df.to_csv(file_path, index=False)
+        print("CSV file successfully created.")
+    except Exception as e:
+        print(f"Error occurred while creating the CSV file: {str(e)}")
+
+df_to_csv(df,'scrapped_films')

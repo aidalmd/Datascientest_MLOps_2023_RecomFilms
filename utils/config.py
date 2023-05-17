@@ -2,4 +2,5 @@
 
 URL='https://www.allocine.fr/film/meilleurs/'
 
-TABLE='nameofthetable.csv'
+FOLDER_LIVE_DATA='./data'
+FOLDER_DATA='data'

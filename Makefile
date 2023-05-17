@@ -1,7 +1,7 @@
 ifeq ($(OS), Windows_NT)
 run:
 	python main.py
-	python webscraping.py
+	python preprocessing.py
 
 install: utils/requirements.txt
 	pip install -r utils/requirements.txt
@@ -17,7 +17,7 @@ clean:
 else
 run:
 	python3 main.py
-	python3 webscraping.py 
+	python3 preprocessing.py 
 
 install: utils/requirements.txt
 	pip3 install -r utils/requirements.txt
