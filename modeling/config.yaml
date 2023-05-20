@@ -1,0 +1,24 @@
+# Configurations for the Content Based Recommendation System
+
+data:
+  movies_file: movies.csv
+
+model:
+  content_features:
+    - title
+    - genres
+    - cast
+    - directors
+    - synopsis
+
+  processed_features:
+      - genres
+      - cast
+      - directors
+
+
+  collaborative_filtering:
+    matrix_factorization: svd
+
+recommendation:
+  top_n: 5

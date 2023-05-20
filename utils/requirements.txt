@@ -8,3 +8,5 @@ sudo apt-get install python3-pandas
 
 # setuptools
 pip3 install setuptools
+
+pip3 install scikit-learn

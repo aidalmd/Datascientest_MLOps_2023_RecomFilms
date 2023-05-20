@@ -65,7 +65,7 @@ def scrape_allocine_films(base_url=URL) -> list:
               'title': title,
               'duration': duration,
               'genres': genres,
-              'director': director,
+              'directors': director,
               'cast': cast,
               'synopsis': synopsis,
               'rating': rating
