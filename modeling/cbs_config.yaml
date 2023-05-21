@@ -11,10 +11,18 @@ model:
     - directors
     - synopsis
 
+  drop_columns:
+    - ["duration"]
+    - ["rating"]
+    - ["duration_min"]
+
   processed_features:
       - genres
       - cast
       - directors
+
+  max_features: 5000
+  stop_words: 'english'
 
 
   collaborative_filtering:

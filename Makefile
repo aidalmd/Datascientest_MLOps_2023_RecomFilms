@@ -7,7 +7,7 @@ install: utils/requirements.txt
 	pip install -r utils/requirements.txt
 
 build: setup.py
-	python setup.py build bdist_wheel
+	python utils/setup.py build bdist_wheel
 
 clean:
 	if exist "./build" rd /s /q build
@@ -23,7 +23,7 @@ install: utils/requirements.txt
 	pip3 install -r utils/requirements.txt
 
 build: setup.py
-	python3 setup.py build bdist_wheel
+	python3 utils/setup.py build bdist_wheel
 
 # Clean up the build artifacts on Windows
 clean:

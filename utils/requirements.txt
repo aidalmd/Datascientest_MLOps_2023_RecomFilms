@@ -10,3 +10,11 @@ sudo apt-get install python3-pandas
 pip3 install setuptools
 
 pip3 install scikit-learn
+
+# handling dependency issue with sklearn.feature_extraction.text
+pip3 install numpy==1.21
+
+# to use sklearn package CountVectorizer
+nltk.download('stopwords')
+
+pip3 install unidecode
