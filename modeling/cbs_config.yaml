@@ -10,10 +10,10 @@ model:
     - cast
     - directors
     - synopsis
+    - rating
 
   drop_columns:
     - ["duration"]
-    - ["rating"]
     - ["duration_min"]
 
   processed_features:

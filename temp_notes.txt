@@ -1,0 +1,23 @@
+# for the dev on the project 
+pip freeze > utils/requirements.txt
+
+#beautifulsoop library
+sudo apt-get install python3-bs4
+
+#pandas library
+sudo apt-get install python3-pandas
+
+# setuptools for the setup.py file
+pip3 install setuptools
+
+# modeling.py
+pip3 install scikit-learn
+
+# handling dependency issue with sklearn.feature_extraction.text
+pip3 install numpy==1.21
+
+# to use sklearn package CountVectorizer
+nltk.download('stopwords')
+
+# modeling.py
+pip3 install unidecode

@@ -1,7 +1,7 @@
 import pandas as pd
 import yaml
 import pickle
-import json
+import csv
 import pytz
 from datetime import datetime
 from unidecode import unidecode
@@ -36,6 +36,9 @@ for feature in cfg['model']['content_features']:
                                                     .replace("]", ""))
         if feature == 'title':
             df[feature] = df[feature].apply(unidecode)
+
+        if feature == 'rating':
+            df[feature] = df[feature].apply(str)
     except Exception as e:
         print(f"Error occurred while searching for feature: {str(e)}")
 
@@ -45,6 +48,8 @@ for feature in cfg['model']['processed_features']:
     
 df['tags'] = (
     df['genres'] +
+    ',' +
+    df['rating'] +
     ',' +
     df['directors'] +
     ',' +
@@ -125,12 +130,16 @@ def give_recommendations():
         'similarity': similarity
     }
 
-    # Convert dictionary to JSON format
-    json_data = json.dumps(artifacts, default=str, indent=4)
+    # Append CSV data to the file
+    with open('artifacts/cbs_model_output.csv', 'a', newline='') as file:
+        writer = csv.DictWriter(file, fieldnames=artifacts.keys())
 
-    # Append JSON data to the file
-    with open('artifacts/output.json', 'a') as file:
-        file.write(json_data + ',' + '\n')
+        # If the file is empty, write the header row
+        if file.tell() == 0:
+            writer.writeheader()
+
+        # Write the data row
+        writer.writerow(artifacts)
 
     pickle.dump(dataframe,open('artifacts/film_list.pkl','wb'))
     pickle.dump(similarity,open('artifacts/similarity.pkl','wb'))
@@ -139,6 +148,3 @@ def give_recommendations():
 
 give_recommendations()
 
-# TODO: fix the issue with the json file format 
-# (the brackets start end and the comma for the last element)
-# but create a function in case you need it for new model
