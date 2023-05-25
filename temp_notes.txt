@@ -7,7 +7,7 @@ sudo apt-get install python3-bs4
 #pandas library
 sudo apt-get install python3-pandas
 
-# setuptools for the setup.py file
+# setuptools for the setup.py file  (setuptools==45.2.0)
 pip3 install setuptools
 
 # modeling.py

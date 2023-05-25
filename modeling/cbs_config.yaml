@@ -1,8 +1,5 @@
 # Configurations for the Content Based Recommendation System
 
-data:
-  movies_file: movies.csv
-
 model:
   content_features:
     - title
@@ -24,9 +21,6 @@ model:
   max_features: 5000
   stop_words: 'english'
 
-
-  collaborative_filtering:
-    matrix_factorization: svd
 
 recommendation:
   top_n: 5

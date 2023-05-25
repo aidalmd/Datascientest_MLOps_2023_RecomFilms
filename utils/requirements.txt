@@ -56,6 +56,7 @@ language-selector==0.1
 launchpadlib==1.10.13
 lazr.restfulclient==0.14.2
 lazr.uri==1.0.3
+Levenshtein==0.21.0
 lxml==4.5.0
 MarkupSafe==1.1.0
 matplotlib==3.1.2
@@ -98,9 +99,11 @@ pytest==4.6.9
 python-apt==2.0.1+ubuntu0.20.4.1
 python-dateutil==2.8.2
 python-debian===0.1.36ubuntu1
+python-Levenshtein==0.21.0
 pytz==2023.3
 PyYAML==5.3.1
 pyzmq==25.0.2
+rapidfuzz==3.0.0
 regex==2023.5.5
 requests==2.22.0
 requests-unixsocket==0.2.0
@@ -109,7 +112,6 @@ scipy==1.3.3
 seaborn==0.12.2
 SecretStorage==2.3.1
 service-identity==18.1.0
-setuptools==45.2.0
 simplejson==3.16.0
 six==1.14.0
 sniffio==1.3.0
