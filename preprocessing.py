@@ -52,9 +52,9 @@ def drop_rows_with_excessive_missing_values(df: pd.DataFrame, max_percent: float
     try:
         percent_missing = df.isnull().mean() * 100
         if percent_missing.all() < max_percent:
-            print(len(df))
+            print('# of rows before computation: ', len(df))
             df.dropna(inplace=True)
-            print(len(df))
+            print('# of rows after computation: ', len(df))
             print("Rows with missing values dropped successfully.")
         else:
             print("Excessive missing values, no rows dropped.")

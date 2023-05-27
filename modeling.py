@@ -49,8 +49,6 @@ for feature in cfg['model']['processed_features']:
 df['tags'] = (
     df['genres'] +
     ',' +
-    df['rating'] +
-    ',' +
     df['directors'] +
     ',' +
     df['cast'] +
@@ -58,8 +56,10 @@ df['tags'] = (
     df['synopsis']
 )
 
-dataframe = df[['title', 'tags']]
+
+dataframe = df[['title', 'tags', 'rating']]
 dataframe.loc[:, 'tags'] = dataframe['tags'].apply(lambda x: x.lower())
+dataframe.loc[:, 'rating'] = dataframe['rating'].astype(float)
 
 
 
@@ -110,12 +110,25 @@ def give_recommendations():
 
     distances = similarity[film_index]
     top_n = cfg['recommendation']['top_n']
-    similar_films = sorted(list(enumerate(distances)),
-                           reverse=True,
-                           key=lambda x: x[1])[1:(top_n + 1)]
+    rating_threshold = cfg['recommendation']['rating_threshold']
 
-    for i in similar_films:
-        print(dataframe.iloc[i[0]]['title'])
+    # Filter movies based on rating threshold
+    filtered_movies = [(i, distance) for i, distance in enumerate(distances)
+                       if dataframe.iloc[i]['rating'] >= rating_threshold]
+
+    # Sort movies by similarity and rating
+    similar_films = sorted(filtered_movies, reverse=True,
+                           key=lambda x: (x[1], -dataframe.iloc[x[0]]['rating']))[1:(top_n + 1)]
+    
+    # Get the title and rating of similar films
+    similar_films = [(dataframe.iloc[i[0]]['title'], dataframe.iloc[i[0]]['rating']) for i in similar_films]
+
+    # Sort top_n films by rating
+    similar_films = sorted(similar_films[:top_n], reverse=True,
+                           key=lambda x: x[1])
+
+    for title, rating in similar_films:
+        print(f"{title} - Rating: {rating}")
 
     satisfaction = input("Was the recommendation satisfying? (Y/N): ")
 
@@ -125,7 +138,8 @@ def give_recommendations():
         'dataframe': LIVE_PROCESSED_TABLE,
         'user_film': film,
         'film_index': film_index,
-        'recommended_films': [dataframe.iloc[i[0]]['title'] for i in similar_films],
+        'recommended_films': [title for title, _ in similar_films],
+        'recommended_ratings': [rating for _, rating in similar_films],
         'satisfaction': satisfaction,
         'similarity': similarity
     }
@@ -141,8 +155,8 @@ def give_recommendations():
         # Write the data row
         writer.writerow(artifacts)
 
-    pickle.dump(dataframe,open('artifacts/film_list.pkl','wb'))
-    pickle.dump(similarity,open('artifacts/similarity.pkl','wb'))
+    pickle.dump(dataframe, open('artifacts/film_list.pkl', 'wb'))
+    pickle.dump(similarity, open('artifacts/similarity.pkl', 'wb'))
 
     return
 

@@ -24,3 +24,4 @@ model:
 
 recommendation:
   top_n: 5
+  rating_threshold: 3.5
