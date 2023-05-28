@@ -18,10 +18,68 @@ from pydantic import BaseModel
 from fastapi.security import HTTPBasic, HTTPBasicCredentials
 #from typing import Annotated
 from enum import Enum, auto , Flag
+from fastapi import Security, Depends, FastAPI, HTTPException, status
+from fastapi.security.api_key import APIKeyHeader, APIKey
+
 
 api = FastAPI(
     title='Recommandation des films'
 )
+
+class User(BaseModel):
+    id: Optional[UUID] = uuid4() 
+    first_name: str
+    password : str
+
+db: List[User] = [
+ User(
+ id=uuid4(),
+ first_name="hajar",
+ password = "toto",
+ ),
+ User(
+ id=uuid4(),
+ first_name="toto",
+ password = "hajar",
+  ),
+  ] 
+
+@api.get("/api/v1/users")
+def get_users():
+ return db
+
+@api.post("/api/v1/users")
+def create_user(user: User):
+ db.append(user)
+ return {"id": user.id}
+
+security = HTTPBasic()
+
+
+@api.get("/users/me")
+def read_current_user(credentials: HTTPBasicCredentials = Depends(security)):
+    print(f" Received credentials: {credentials}")
+    return {"username": credentials.username, "password": credentials.password}
+
+
+API_KEY = "movies1"
+API_KEY_NAME = "admin"
+
+api_key_header = APIKeyHeader(name=API_KEY_NAME, auto_error=False)
+
+async def get_api_key(api_key_header: str = Security(api_key_header)):
+    if api_key_header == API_KEY:
+        return api_key_header
+    raise HTTPException(
+        status_code=status.HTTP_403_FORBIDDEN,
+        detail="Could not validate credentials"
+    )
+
+
+
+
+
+
 
 def get_page_contents(page):
     page = requests.get('https://www.allocine.fr/film/meilleurs/' 
@@ -75,8 +133,9 @@ def get_recommendations(title):
     sim_scores = sim_scores[1:6]
 
     movie_indices = [i[0] for i in sim_scores]
+    result = movies[['title','note']].iloc[movie_indices]
 
-    return movies['title'].iloc[movie_indices]
+    return result.sort_values(by='note', ascending = True)
     
 
 
@@ -88,7 +147,7 @@ class Title(BaseModel):
     
   
   
-@api.post("/api/v1/recommentations")
+@api.post("/api/v1/recommendations")
 def create_movie(user : Title):
  #db.append(user)
  #get_recommendations(movie)
