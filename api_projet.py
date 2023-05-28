@@ -62,6 +62,7 @@ def read_current_user(credentials: HTTPBasicCredentials = Depends(security)):
     return {"username": credentials.username, "password": credentials.password}
 
 
+## admin
 API_KEY = "movies1"
 API_KEY_NAME = "admin"
 
@@ -133,10 +134,11 @@ def get_recommendations(title):
     sim_scores = sim_scores[1:6]
 
     movie_indices = [i[0] for i in sim_scores]
-    result = movies[['title','note']].iloc[movie_indices]
+    #result = movies[['title','note']].iloc[movie_indices]
+    result = movies[['title','note']].sort_values(by='note', ascending = True)
 
-    return result.sort_values(by='note', ascending = True)
-    
+    return result.iloc[movie_indices]
+   
 
 
 
