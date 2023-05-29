@@ -28,5 +28,8 @@ def get_most_recent_csv(folder_path, prefix):
 LIVE_SCRAPPED_TABLE = get_most_recent_csv(folder_path=f'{FOLDER_LIVE_DATA}', prefix="scrapped")
 LIVE_PROCESSED_TABLE = get_most_recent_csv(folder_path=f'{FOLDER_LIVE_DATA}', prefix="processed")
 
-print(LIVE_SCRAPPED_TABLE)
-print(LIVE_PROCESSED_TABLE)
+
+
+
+# Once we get the most up to date we rename it
+# Should we delete the all the other csv once the database is created ?

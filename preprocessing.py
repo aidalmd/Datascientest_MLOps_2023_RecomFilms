@@ -3,7 +3,7 @@ import re
 
 from webscraping import df_to_csv
 from utils.config import FOLDER_DATA
-from file_management import LIVE_SCRAPPED_TABLE
+from data_management import LIVE_SCRAPPED_TABLE
 
 # The most up to date scrapped csv version is used
 df = pd.read_csv(f'{FOLDER_DATA}/{LIVE_SCRAPPED_TABLE}') if LIVE_SCRAPPED_TABLE else None
