@@ -1,5 +1,6 @@
 import pandas as pd
 import numpy as np
+from sklearn.metrics import PredictionErrorDisplay
 import yaml
 import pickle
 import csv
@@ -15,8 +16,8 @@ from sklearn.metrics.pairwise import cosine_similarity
 import nltk
 from nltk.stem.porter import PorterStemmer
 
-from utils.config import FOLDER_DATA
-from data_management import LIVE_PROCESSED_TABLE
+from config import FOLDER_DATA
+from data_management import LIVE_PROCESSED_TABLE, create_table, retrieve_data_from_server
 
 
 def execution_time(function):
@@ -34,10 +35,14 @@ def execution_time(function):
 with open('model/cbs_config.yaml') as file:
     cfg = yaml.safe_load(file)
 
-# The most up to date scrapped csv version is used
-df = pd.read_csv(f'{FOLDER_DATA}/{LIVE_PROCESSED_TABLE}') if LIVE_PROCESSED_TABLE else None
+# We retrieve the data from MySQL server
+df = retrieve_data_from_server(db_name='recommendation', 
+                           table_name='films')
+
+
 
 columns_to_drop = [col[0] for col in cfg['model']['drop_columns']]
+# we have: title,genres,directors,cast,synopsis,rating
 df = df.drop(columns_to_drop, axis=1)
 
 # Apply lambda function to each feature specified in config.yaml
@@ -122,7 +127,7 @@ def suggest_film(film: str):
     return None
 
 @execution_time
-def give_recommendations():
+def give_recommendations() -> dict:
     film = input("Enter a film title: ")
     film_index = dataframe[dataframe['title'] == film].index
 
@@ -133,7 +138,7 @@ def give_recommendations():
             film_index = dataframe[dataframe['title'] == film].index[0]
         else:
             print(f"No film found with the title '{film}'.")
-            return
+            return None
     else:
         film_index = film_index[0]
 
@@ -159,42 +164,35 @@ def give_recommendations():
     for title, rating in similar_films:
         print(f"{title} - Rating: {rating}")
 
-    prediction = {
+    films_predictions = {
         'recom_date': datetime.now(pytz.timezone('Europe/Paris')).strftime("%Y%m%d%H%M"),
-        'dataframe': LIVE_PROCESSED_TABLE,
         'user_film': film,
         'film_index': film_index,
         'recommended_films': [title for title, _ in similar_films],
-        'recommended_ratings': [rating for _, rating in similar_films],
-        'similarity': similarity
+        'recommended_ratings': [rating for _, rating in similar_films]
     }
+    return films_predictions
 
-    return prediction
-
-def get_satisfaction(prediction: dict):
+def get_satisfaction(films_predictions: dict) -> dict:
     try:
         while True:
             satisfaction = input("Was the recommendation satisfying? (Y/N): ").strip().upper()
             if satisfaction in ('Y', 'N'):
-                prediction['satisfaction'] = satisfaction
+                films_predictions['satisfaction'] = satisfaction
                 break
             else:
                 print("Invalid input. Please enter 'Y' or 'N'.")
 
     except Exception as e:
         print(f"An error occurred: {str(e)}")
-        return prediction
+        return films_predictions
 
-    return prediction
+    return films_predictions
 
-def store_prediction_csv(prediction: dict):
-    with open('artifacts/cbs_model_output.csv', 'a', newline='') as file:
-        writer = csv.DictWriter(file, fieldnames=prediction.keys())
-        # If the file is empty, write the header row
-        if file.tell() == 0:
-            writer.writeheader()
-        # Write the data row
-        writer.writerow(prediction)
+
+def store_predictions_df(films_predictions: dict) -> pd.DataFrame:
+    return pd.DataFrame([films_predictions]) 
+
 
 def store_prediction_pickle(dataframe: pd.DataFrame, similarity: np.array):
     pickle.dump(dataframe, open('artifacts/film_list.pkl', 'wb'))
@@ -202,7 +200,16 @@ def store_prediction_pickle(dataframe: pd.DataFrame, similarity: np.array):
 
 # Call the functions
 prediction = give_recommendations()
-prediction = get_satisfaction(prediction)
 
-store_prediction_csv(prediction)
-store_prediction_pickle(dataframe, similarity)
+if prediction is not None:
+    prediction = get_satisfaction(prediction)
+    df_predictions = store_predictions_df(prediction)
+    # TODO: populate the SQL Table
+    create_table(db_name='recommendation', 
+             table_name='predictions', 
+             df=df_predictions, 
+             drop_table=False)
+    store_prediction_pickle(dataframe, similarity)
+else:
+    print("No film recommendations available.")
+

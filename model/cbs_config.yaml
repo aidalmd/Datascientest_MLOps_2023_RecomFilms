@@ -10,7 +10,6 @@ model:
     - rating
 
   drop_columns:
-    - ["duration"]
     - ["duration_min"]
 
   processed_features:

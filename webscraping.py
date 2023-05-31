@@ -1,10 +1,11 @@
 import requests
+import os
 import pandas as pd
 import pytz
 from datetime import datetime
 from bs4 import BeautifulSoup as bs
 
-from utils.config import URL, FOLDER_LIVE_DATA
+from config import URL, FOLDER_LIVE_DATA
 
 def scrape_allocine_films(base_url=URL) -> list:
     """
@@ -36,9 +37,6 @@ def scrape_allocine_films(base_url=URL) -> list:
 
       for film_item in film_items:
           # Extract the film details
-          rank_elem = film_item.find('div', class_='label-ranking')
-          rank = rank_elem.text.strip() if rank_elem is not None else ''
-
           title = film_item.find('h2', class_='meta-title').text.strip()
 
           duration_elem =  duration = film_item.find('div', class_='meta-body-item meta-body-info')
@@ -61,7 +59,6 @@ def scrape_allocine_films(base_url=URL) -> list:
 
           # Create a dictionary for the film
           film = {
-              'rank': rank,
               'title': title,
               'duration': duration,
               'genres': genres,
@@ -98,4 +95,30 @@ def df_to_csv(df: pd.DataFrame, filename: str):
     except Exception as e:
         print(f"Error occurred while creating the CSV file: {str(e)}")
 
+# Creating a Dataframe of the scraped data e.g.: scrapped_films_YYYYMMHHMM.csv
 df_to_csv(df,'scrapped_films')
+
+
+def get_most_recent_csv(folder_path, prefix):
+    try:
+        files = []
+        # Get a list of all CSV files in the folder
+        for file in os.listdir(folder_path):
+            if file.startswith(prefix) and file.endswith(".csv"):
+                    files.append(file)
+
+        # Sort the scraped CSV files based on the timestamp in their names
+        files.sort(key=lambda x: datetime.strptime(x.split("_")[2].split(".")[0], "%Y%m%d%H%M"))
+        # Get the most recent scraped CSV file
+        most_recent_file = str(files[-1]) if files else None
+        # Return the names of the most recent CSV files for both categories as strings
+        return most_recent_file
+    except (OSError, IOError) as e:
+        print("Error occurred while accessing the folder:", e)
+        return None
+    except Exception as e:
+        print("An error occurred:", e)
+        return None
+    
+# The most up to date scrapped csv version
+LIVE_SCRAPPED_TABLE = get_most_recent_csv(folder_path=f'{FOLDER_LIVE_DATA}', prefix="scrapped")

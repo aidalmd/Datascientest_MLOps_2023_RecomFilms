@@ -1,9 +1,7 @@
 import pandas as pd
 import re
-
-from webscraping import df_to_csv
-from utils.config import FOLDER_DATA
-from data_management import LIVE_SCRAPPED_TABLE
+from config import FOLDER_DATA
+from webscraping import LIVE_SCRAPPED_TABLE
 
 # The most up to date scrapped csv version is used
 df = pd.read_csv(f'{FOLDER_DATA}/{LIVE_SCRAPPED_TABLE}') if LIVE_SCRAPPED_TABLE else None
@@ -25,6 +23,7 @@ def convert_duration_to_minutes(duration):
 
 # Apply the duration conversion function to the 'duration' column
 df['duration_min'] = df['duration'].apply(convert_duration_to_minutes)
+df = df.drop('duration', axis=1)
 
 # Remove '\n', 'Avec', and 'De' using a lambda function with try-except
 def remove_parasite_chars(text: str):
@@ -62,7 +61,5 @@ def drop_rows_with_excessive_missing_values(df: pd.DataFrame, max_percent: float
     except Exception as e:
         print(f"An error occurred: {str(e)}")
 
-df_processed = drop_rows_with_excessive_missing_values(df, 5.0)
-
-# Create a csv file of the processed dataframe
-processed_csv = df_to_csv(df_processed, 'processed_films')
+# The cleaned, transformed version of scraped_films data
+LIVE_PROCESSED_TABLE = drop_rows_with_excessive_missing_values(df, 5.0)
