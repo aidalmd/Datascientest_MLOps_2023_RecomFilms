@@ -1,4 +1,4 @@
-<mxfile host="app.diagrams.net" modified="2023-05-31T13:21:04.347Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/113.0.0.0 Safari/537.36" etag="SJNqEj4iWLcN6HtCzqV8" version="21.3.5" type="github">
+<mxfile host="app.diagrams.net" modified="2023-05-31T13:29:08.591Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/113.0.0.0 Safari/537.36" etag="bFegFdhJlJNF-dpt8TWk" version="21.3.5" type="github">
   <diagram name="Page-1" id="RjCxhjMG5KbP_nqhRtp3">
     <mxGraphModel dx="2199" dy="960" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
@@ -7,11 +7,11 @@
         <mxCell id="uJ_gCBMD8Is41iQEiKez-29" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;opacity=30;" vertex="1" parent="1">
           <mxGeometry x="-220" y="17" width="874" height="592" as="geometry" />
         </mxCell>
-        <mxCell id="uJ_gCBMD8Is41iQEiKez-22" value="We take the most up to date version of the&lt;br&gt;scraped data" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
-          <mxGeometry x="-117" y="427.5" width="243" height="41" as="geometry" />
+        <mxCell id="uJ_gCBMD8Is41iQEiKez-22" value="We take the most up to date version of the&lt;br&gt;scraped data&lt;br&gt;(python &amp;amp; beautifulsoup4)" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="-117" y="423" width="243" height="55" as="geometry" />
         </mxCell>
-        <mxCell id="QvHbqH3VG2zDnp77krn9-10" value="webscrapping.py" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontStyle=2" parent="1" vertex="1">
-          <mxGeometry x="571" y="22" width="60" height="30" as="geometry" />
+        <mxCell id="QvHbqH3VG2zDnp77krn9-10" value="webscrapping.py" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontStyle=3" parent="1" vertex="1">
+          <mxGeometry x="567" y="22" width="60" height="30" as="geometry" />
         </mxCell>
         <mxCell id="uJ_gCBMD8Is41iQEiKez-8" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="DFwWn_DKLroZGIDrzsYz-1" target="3sKjhCG4QqQidB9nRvCR-2">
           <mxGeometry relative="1" as="geometry" />
@@ -36,11 +36,11 @@
         <mxCell id="uJ_gCBMD8Is41iQEiKez-30" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;opacity=30;" vertex="1" parent="1">
           <mxGeometry x="-220" y="616" width="874" height="135" as="geometry" />
         </mxCell>
-        <mxCell id="QvHbqH3VG2zDnp77krn9-6" value="preprocessing.py" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontStyle=2" parent="1" vertex="1">
-          <mxGeometry x="571" y="622" width="60" height="30" as="geometry" />
+        <mxCell id="QvHbqH3VG2zDnp77krn9-6" value="preprocessing.py" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontStyle=3" parent="1" vertex="1">
+          <mxGeometry x="566" y="622" width="60" height="30" as="geometry" />
         </mxCell>
         <mxCell id="uJ_gCBMD8Is41iQEiKez-10" value="df_preprocessed" style="swimlane;childLayout=stackLayout;horizontal=1;startSize=50;horizontalStack=0;rounded=1;fontSize=14;fontStyle=0;strokeWidth=2;resizeParent=0;resizeLast=1;shadow=0;dashed=0;align=center;arcSize=4;whiteSpace=wrap;html=1;" vertex="1" parent="1">
-          <mxGeometry x="281.75" y="671" width="141.5" height="68" as="geometry" />
+          <mxGeometry x="281.75" y="652" width="141.5" height="68" as="geometry" />
         </mxCell>
         <mxCell id="uJ_gCBMD8Is41iQEiKez-13" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="Kb5XjLtIZUl5t38yNHnz-2" target="uJ_gCBMD8Is41iQEiKez-10">
           <mxGeometry relative="1" as="geometry" />
@@ -72,8 +72,8 @@
         <mxCell id="uJ_gCBMD8Is41iQEiKez-31" value="&lt;h1&gt;3&lt;/h1&gt;" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;" vertex="1" parent="1">
           <mxGeometry x="-190" y="658.5" width="50" height="50" as="geometry" />
         </mxCell>
-        <mxCell id="uJ_gCBMD8Is41iQEiKez-32" value="The data is transformed and cleaned" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
-          <mxGeometry x="-117" y="670.5" width="213" height="26" as="geometry" />
+        <mxCell id="uJ_gCBMD8Is41iQEiKez-32" value="The data is transformed and cleaned&lt;br&gt;(python &amp;amp; pandas)" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="-117" y="667.5" width="213" height="41" as="geometry" />
         </mxCell>
         <mxCell id="uJ_gCBMD8Is41iQEiKez-33" value="" style="endArrow=none;dashed=1;html=1;dashPattern=1 3;strokeWidth=2;rounded=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;" edge="1" parent="1" source="uJ_gCBMD8Is41iQEiKez-31" target="uJ_gCBMD8Is41iQEiKez-21">
           <mxGeometry width="50" height="50" relative="1" as="geometry">
@@ -81,8 +81,8 @@
             <mxPoint x="315" y="600" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="uJ_gCBMD8Is41iQEiKez-20" value="We scrapped the data from the website allociné." style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
-          <mxGeometry x="-117" y="77" width="274" height="26" as="geometry" />
+        <mxCell id="uJ_gCBMD8Is41iQEiKez-20" value="We scrapped the data from the website allociné.&lt;br&gt;(python &amp;amp; beautifulsoup4)" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="-117" y="74" width="274" height="41" as="geometry" />
         </mxCell>
         <mxCell id="uJ_gCBMD8Is41iQEiKez-18" value="&lt;h1&gt;1&lt;/h1&gt;" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;" vertex="1" parent="1">
           <mxGeometry x="-190" y="65" width="50" height="50" as="geometry" />
@@ -96,8 +96,8 @@
             <mxPoint x="315" y="471" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="3sKjhCG4QqQidB9nRvCR-1" value="data_management.py" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontStyle=2" parent="1" vertex="1">
-          <mxGeometry x="558" y="761" width="60" height="30" as="geometry" />
+        <mxCell id="3sKjhCG4QqQidB9nRvCR-1" value="data_management.py" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontStyle=3" parent="1" vertex="1">
+          <mxGeometry x="556" y="761" width="60" height="30" as="geometry" />
         </mxCell>
         <mxCell id="QvHbqH3VG2zDnp77krn9-3" value="preprocessed_films" style="swimlane;childLayout=stackLayout;horizontal=1;startSize=50;horizontalStack=0;rounded=1;fontSize=14;fontStyle=0;strokeWidth=2;resizeParent=0;resizeLast=1;shadow=0;dashed=0;align=center;arcSize=4;whiteSpace=wrap;html=1;" parent="1" vertex="1">
           <mxGeometry x="226.5" y="828" width="252" height="183" as="geometry" />
@@ -111,10 +111,16 @@
           </mxGeometry>
         </mxCell>
         <mxCell id="uJ_gCBMD8Is41iQEiKez-37" value="&lt;h1&gt;4&lt;/h1&gt;" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;" vertex="1" parent="1">
-          <mxGeometry x="-190" y="798" width="50" height="50" as="geometry" />
+          <mxGeometry x="-190" y="868" width="50" height="50" as="geometry" />
         </mxCell>
-        <mxCell id="uJ_gCBMD8Is41iQEiKez-38" value="We create the SQL database" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
-          <mxGeometry x="-117" y="810" width="172" height="26" as="geometry" />
+        <mxCell id="uJ_gCBMD8Is41iQEiKez-38" value="We create the SQL database&lt;br&gt;(python, pandas, MySQL)" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="-117" y="877" width="172" height="41" as="geometry" />
+        </mxCell>
+        <mxCell id="uJ_gCBMD8Is41iQEiKez-43" value="" style="endArrow=none;dashed=1;html=1;dashPattern=1 3;strokeWidth=2;rounded=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;" edge="1" parent="1" source="uJ_gCBMD8Is41iQEiKez-37" target="uJ_gCBMD8Is41iQEiKez-31">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="265" y="634" as="sourcePoint" />
+            <mxPoint x="315" y="584" as="targetPoint" />
+          </mxGeometry>
         </mxCell>
       </root>
     </mxGraphModel>
