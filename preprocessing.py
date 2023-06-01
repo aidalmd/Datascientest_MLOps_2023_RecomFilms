@@ -20,11 +20,6 @@ def convert_duration_to_minutes(duration):
     except Exception as e:
         print(f"An error occurred: {str(e)}")
 
-
-# Apply the duration conversion function to the 'duration' column
-df['duration_min'] = df['duration'].apply(convert_duration_to_minutes)
-df = df.drop('duration', axis=1)
-
 # Remove '\n', 'Avec', and 'De' using a lambda function with try-except
 def remove_parasite_chars(text: str):
     try:
@@ -34,8 +29,6 @@ def remove_parasite_chars(text: str):
     except AttributeError:
         pass
     return text
-
-df = df.applymap(lambda x: remove_parasite_chars(x) if isinstance(x, str) else x)
 
 def display_rows_with_missing_values(df: pd.DataFrame):
     try:
@@ -61,5 +54,13 @@ def drop_rows_with_excessive_missing_values(df: pd.DataFrame, max_percent: float
     except Exception as e:
         print(f"An error occurred: {str(e)}")
 
-# The cleaned, transformed version of scraped_films data
-LIVE_PROCESSED_TABLE = drop_rows_with_excessive_missing_values(df, 5.0)
+
+if __name__ == "__main__":
+    # Apply the duration conversion function to the 'duration' column
+    df['duration_min'] = df['duration'].apply(convert_duration_to_minutes)
+    df = df.drop('duration', axis=1)
+    df = df.applymap(lambda x: remove_parasite_chars(x) if isinstance(x, str) else x)
+    # The cleaned, transformed version of scraped_films data
+    LIVE_PROCESSED_TABLE = drop_rows_with_excessive_missing_values(df, 5.0)
+    LIVE_PROCESSED_TABLE.to_csv(f'{FOLDER_DATA}/cleaned_films.csv', index=False)
+

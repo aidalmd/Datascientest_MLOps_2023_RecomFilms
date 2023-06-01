@@ -167,9 +167,8 @@ def give_recommendations() -> dict:
     films_predictions = {
         'recom_date': datetime.now(pytz.timezone('Europe/Paris')).strftime("%Y%m%d%H%M"),
         'user_film': film,
-        'film_index': film_index,
-        'recommended_films': [title for title, _ in similar_films],
-        'recommended_ratings': [rating for _, rating in similar_films]
+        'recommended_films': tuple(title for title, _ in similar_films),
+        'recommended_ratings': tuple(rating for _, rating in similar_films)
     }
     return films_predictions
 
@@ -191,7 +190,7 @@ def get_satisfaction(films_predictions: dict) -> dict:
 
 
 def store_predictions_df(films_predictions: dict) -> pd.DataFrame:
-    return pd.DataFrame([films_predictions]) 
+    return pd.DataFrame.from_dict(films_predictions) 
 
 
 def store_prediction_pickle(dataframe: pd.DataFrame, similarity: np.array):

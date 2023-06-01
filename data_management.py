@@ -5,7 +5,6 @@ import mysql.connector
 from mysql.connector import Error
 from dotenv import dotenv_values
 
-from preprocessing import LIVE_PROCESSED_TABLE
 
 config = dotenv_values('.env')
 
@@ -27,7 +26,6 @@ def create_database(db_name: str):
     except mysql.connector.Error as e:
         print("Error while creating database:", e)
 
-
 def create_table(db_name: str, 
                  table_name: str, 
                  df, drop_table: bool=False):
@@ -46,7 +44,7 @@ def create_table(db_name: str,
             
             if drop_table:
                 cursor.execute(f"DROP TABLE IF EXISTS {table_name};")
-                print(f"Dropped table {table_name} if it exists.")
+                print(f"Table {table_name} already existing. Droping...")
 
             table_exists = False
             show_tables_query = f"SHOW TABLES LIKE '{table_name}'"
@@ -83,15 +81,6 @@ def create_table(db_name: str,
     except mysql.connector.Error as e:
         print("Error while connecting to MySQL:", e)
 
-
-# Uncomment the following line to create the 'recommendation' database
-#create_database('recommendation')
-# Call the function to create the table and insert data
-create_table(db_name='recommendation', 
-             table_name='films', 
-             df=LIVE_PROCESSED_TABLE, 
-             drop_table=True)
-
 def retrieve_data_from_server(db_name: str, table_name: str) -> pd.DataFrame:
     try:
         conn = mysql.connector.connect(
@@ -117,3 +106,16 @@ def retrieve_data_from_server(db_name: str, table_name: str) -> pd.DataFrame:
             return df
     except mysql.connector.Error as e:
         print("Error while connecting to MySQL:", e)
+
+
+
+if __name__ == "__main__":
+    # Uncomment the following line to create the 'recommendation' database
+    #create_database('recommendation')
+    LIVE_PROCESSED_TABLE = pd.read_csv('data/cleaned_films.csv')
+    print("the columns of the df: ",LIVE_PROCESSED_TABLE.columns)
+    # Call the function to create the table and insert data
+    create_table(db_name='recommendation', 
+                table_name='films', 
+                df=LIVE_PROCESSED_TABLE, 
+                drop_table=False) # TODO: change into True
