@@ -57,7 +57,7 @@ def create_table(db_name: str,
                 column_definitions = []
                 for column_name, column_type in zip(df.columns, df.dtypes):
                     if column_type == 'float64':
-                        column_definitions.append(f"`{column_name}` FLOAT")
+                        column_definitions.append(f"`{column_name}` FLOAT(10,1)")
                     elif column_type == 'int64':
                         column_definitions.append(f"`{column_name}` INT")
                     elif column_name == 'synopsis':
@@ -74,6 +74,7 @@ def create_table(db_name: str,
             insert_query = f"INSERT INTO {table_name} ({', '.join(df.columns)}) VALUES ({placeholders})"
             data = df.values.tolist()
             cursor.executemany(insert_query, data)
+            print(f"New row inserted in table: {table_name}.")
 
             # The connection is not auto-committed by default, so we must commit to save our changes
             conn.commit()
@@ -112,8 +113,7 @@ def retrieve_data_from_server(db_name: str, table_name: str) -> pd.DataFrame:
 if __name__ == "__main__":
     # Uncomment the following line to create the 'recommendation' database
     #create_database('recommendation')
-    LIVE_PROCESSED_TABLE = pd.read_csv('data/cleaned_films.csv')
-    print("the columns of the df: ",LIVE_PROCESSED_TABLE.columns)
+    LIVE_PROCESSED_TABLE = pd.read_csv('data/processed_films.csv')
     # Call the function to create the table and insert data
     create_table(db_name='recommendation', 
                 table_name='films', 

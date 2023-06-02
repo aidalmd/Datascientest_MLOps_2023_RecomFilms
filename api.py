@@ -1,5 +1,5 @@
 from fastapi import FastAPI, Security, Depends, HTTPException, status
-from typing import List, Optional
+from typing import List, Optional, Tuple
 import uuid
 from uuid import UUID, uuid4
 import numpy as np
@@ -11,7 +11,8 @@ from fastapi.security.api_key import APIKeyHeader
 from dotenv import dotenv_values
 import yaml
 
-from data_management import retrieve_data_from_server
+from modeling import give_recommendations, prepare_data_model, store_predictions_df
+from data_management import create_table, retrieve_data_from_server
 
 
 config = dotenv_values('.env')
@@ -45,20 +46,14 @@ class User(BaseModel):
     username: str
     password : str
 
-# Define the input models
-class FilmInput(BaseModel):
-    film: str
+class Film(BaseModel):
+    title: str
 
-class SatisfactionInput(BaseModel):
-    satisfaction: str
-
-class PredictionOutput(BaseModel):
+class Recommendation(BaseModel):
     recom_date: str
     user_film: str
-    recommended_films: List[str]
-    recommended_ratings: List[float]
-    satisfaction: Optional[str]
-
+    recommended_films: Tuple[str, ...]
+    recommended_ratings: Tuple[float, ...]
 
 # Loading the users table directly from MySQL Server
 db = retrieve_data_from_server(db_name='recommendation', table_name='users') 
@@ -139,7 +134,7 @@ def load_config(file_path: str) -> dict:
         config = yaml.safe_load(file)
     return config
 
-# We retrieve the films from MySQL server
+# We retrieve the table films from MySQL server
 @api.get("/api/v1/table_films")
 def get_table_films():
     query = "SELECT * FROM films"
@@ -149,4 +144,52 @@ def get_table_films():
     films_list = df.to_dict(orient='records')
     return films_list
 
-# TODO:  add predictions in the api
+
+def get_recommendations(film: Film, output=int) -> Recommendation:
+    # Load the model and configuration
+    with open('model/cbs_config.yaml') as file:
+        cfg = yaml.safe_load(file)
+    
+    query = "SELECT * FROM films"
+    cursor.execute(query)
+    results = cursor.fetchall()
+    df = pd.DataFrame(results, columns=[column[0] for column in cursor.description])
+
+    # Prepare the data and calculate similarity
+    similarity = prepare_data_model(df, cfg)
+
+    # Get the recommendations
+    predictions = give_recommendations(df, film=film.title, sim=similarity)
+
+    if predictions is None:
+        return None
+    
+    # Create a Recommendation object that we'll need to store
+    recommendation = Recommendation(
+        recom_date=predictions['recom_date'],
+        user_film=predictions['user_film'],
+        recommended_films=tuple(predictions['recommended_films']),
+        recommended_ratings=tuple(predictions['recommended_ratings'])
+    )
+    # Insert the recommendation into the pred table using parameterized query
+    df_predictions = store_predictions_df(predictions)
+    create_table(db_name='recommendation', 
+                 table_name='predictions', 
+                 df=df_predictions, 
+                 drop_table=False)
+    
+    # Displaying the recommended films
+    recommended_films = predictions['recommended_films']
+
+    if output == 1:
+        return list(recommended_films)
+    elif output ==2:
+        return recommendation
+
+@api.post("/recommendations", response_model=List[str])
+def recommend_films(film: Film):
+    return get_recommendations(film, output=1)
+
+@api.post("/recommendations/predictions", response_model=Recommendation)
+def predictions(film: Film):
+    return get_recommendations(film, output=2)

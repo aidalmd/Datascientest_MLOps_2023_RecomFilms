@@ -62,5 +62,5 @@ if __name__ == "__main__":
     df = df.applymap(lambda x: remove_parasite_chars(x) if isinstance(x, str) else x)
     # The cleaned, transformed version of scraped_films data
     LIVE_PROCESSED_TABLE = drop_rows_with_excessive_missing_values(df, 5.0)
-    LIVE_PROCESSED_TABLE.to_csv(f'{FOLDER_DATA}/cleaned_films.csv', index=False)
+    LIVE_PROCESSED_TABLE.to_csv(f'{FOLDER_DATA}/processed_films.csv', index=False)
 
