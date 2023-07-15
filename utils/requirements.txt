@@ -10,6 +10,7 @@ pickleshare==0.7.5
 pytest==7.3.1
 python-dotenv==1.0.0
 pytz==2023.3
+PyYAML==5.3.1
 requests==2.22.0
 requests-unixsocket==0.2.0
 starlette==0.26.1
