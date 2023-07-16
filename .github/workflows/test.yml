@@ -1,4 +1,4 @@
-name: Fast-API CI
+name: Movies recommendation
 on:
   push:
     branches: [ v1-hajar ]
