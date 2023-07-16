@@ -1,1 +1,55 @@
-test
+name: Fast-API CI
+on:
+  push:
+    branches: [ v1-hajar ]
+  pull_request:
+    branches: [ v1-hajar ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Test python Code
+      run: | 
+        pip3 install -r requirements.txt 
+        pytest
+      
+  build-push-container:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Build the Docker image
+      run: | 
+        docker build -t jira0325/Datascientest_MLOps_2023_RecomFilms:${GITHUB_SHA} .
+        docker tag  jira0325/Datascientest_MLOps_2023_RecomFilms:${GITHUB_SHA} fallewi/fast-api:latest
+        docker images
+        docker run -d -p 80:80 --name fastapi jira0325/Datascientest_MLOps_2023_RecomFilms:${GITHUB_SHA}
+        sleep 10
+        docker login -u ${{ secrets.REGISTRY_USER  }} -p ${{ secrets.REGISTRY_PASSWD  }}
+        docker push jira0325/Datascientest_MLOps_2023_RecomFilms:${GITHUB_SHA}
+        docker push jira0325/Datascientest_MLOps_2023_RecomFilms:latest
+
+  deploy:
+    needs: build-push-container
+    name: deploy
+    runs-on: ubuntu-latest
+    steps:
+    - name: executing remote ssh commands using password
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.HOSTNAME  }}
+        username: ${{ secrets.USER_NAME  }}
+        key: ${{ secrets.AWS_PRIVATE_KEY  }}
+        port: 22
+        script: |
+          sudo docker rm -f fastapi 
+          sudo docker rmi jira0325/Datascientest_MLOps_2023_RecomFilms:latest
+          sleep 10 
+          sudo docker run -d -p 9000:80 --name fastapi jira0325/Datascientest_MLOps_2023_RecomFilms:latest
+          sudo docker ps 
+          sleep 10 
+          curl localhost:9000
+          ls 
+          sudo docker images
