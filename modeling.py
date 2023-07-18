@@ -18,7 +18,10 @@ import nltk
 from nltk.stem.porter import PorterStemmer
 
 from config import FOLDER_DATA
-from data_management import create_table, retrieve_data_from_server
+from data_management import (
+    create_table,
+    retrieve_data_from_server
+)
 
 
 def function_timer(func):

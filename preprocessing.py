@@ -1,10 +1,15 @@
 import pandas as pd
 import re
+import yaml
 from config import FOLDER_DATA
 from webscraping import LIVE_SCRAPPED_TABLE
 
 # The most up to date scrapped csv version is used
 df = pd.read_csv(f'{FOLDER_DATA}/{LIVE_SCRAPPED_TABLE}') if LIVE_SCRAPPED_TABLE else None
+
+# Load the config.yaml file
+with open('model/cbs_config.yaml') as file:
+    cfg = yaml.safe_load(file)
 
 def convert_duration_to_minutes(duration):
     try:
@@ -30,37 +35,26 @@ def remove_parasite_chars(text: str):
         pass
     return text
 
-def display_rows_with_missing_values(df: pd.DataFrame):
+def drop_rows_with_missing_values(df: pd.DataFrame, 
+                                            content_features: list) -> pd.DataFrame:
+    print('# of rows before computation: ', len(df))
     try:
-        # Create a boolean mask for rows with missing values
-        mask = df.isnull().any(axis=1)
-        # Filter the DataFrame using the mask
-        rows_with_missing = df[mask]
-        return rows_with_missing
-    except Exception as e:
-        print(f"An error occurred: {str(e)}")
-
-def drop_rows_with_excessive_missing_values(df: pd.DataFrame, max_percent: float) -> pd.DataFrame:
-    try:
-        percent_missing = df.isnull().mean() * 100
-        if percent_missing.all() < max_percent:
-            print('# of rows before computation: ', len(df))
-            df.dropna(inplace=True)
-            print('# of rows after computation: ', len(df))
-            print("Rows with missing values dropped successfully.")
-        else:
-            print("Excessive missing values, no rows dropped.")
+        # Drop rows with missing values in content features
+        df = df.dropna(subset=content_features)
+        print('# of rows after computation: ', len(df))
         return df
     except Exception as e:
-        print(f"An error occurred: {str(e)}")
+        print("An error occurred:", str(e))
+        return None
 
 
 if __name__ == "__main__":
     # Apply the duration conversion function to the 'duration' column
     df['duration_min'] = df['duration'].apply(convert_duration_to_minutes)
     df = df.drop('duration', axis=1)
-    df = df.applymap(lambda x: remove_parasite_chars(x) if isinstance(x, str) else x)
+    df = df.applymap(lambda x: remove_parasite_chars(x) if isinstance(x, str) 
+                     else x)
     # The cleaned, transformed version of scraped_films data
-    LIVE_PROCESSED_TABLE = drop_rows_with_excessive_missing_values(df, 5.0)
+    LIVE_PROCESSED_TABLE = df = drop_rows_with_missing_values(df, cfg['model']['content_features'])
     LIVE_PROCESSED_TABLE.to_csv(f'{FOLDER_DATA}/processed_films.csv', index=False)
 

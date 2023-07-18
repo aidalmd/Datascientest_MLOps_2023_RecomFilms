@@ -3,7 +3,11 @@ import mysql.connector
 import pandas as pd
 from unittest import mock
 from dotenv import dotenv_values
-from data_management import create_database, create_table, retrieve_data_from_server
+from data_management import (
+    create_database, 
+    create_table, 
+    retrieve_data_from_server
+    )
 
 config = dotenv_values('.env')
 
