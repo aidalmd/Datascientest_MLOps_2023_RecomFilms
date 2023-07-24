@@ -1,5 +1,6 @@
 import pytest
 import pandas as pd
+from collections.abc import Mapping
 import warnings
 warnings.filterwarnings("ignore", category=DeprecationWarning)
 
@@ -23,7 +24,7 @@ def test_remove_parasite_chars():
     assert remove_parasite_chars('\nSample\nText\n') == 'SampleText'
     assert remove_parasite_chars('No Parasite Chars') == 'No Parasite Chars'
 
-# TODO: add a Unit test for the drop_rows_with_missing_values function
+# Unit test for the drop_rows_with_missing_values function
 def test_drop_rows_with_missing_values():
     # Create a sample DataFrame with missing values
     df = pd.DataFrame({
@@ -35,7 +36,7 @@ def test_drop_rows_with_missing_values():
         'synopsis': ['Pew Pew', 'Barbie and Ken', None],
         'rating': [4.9, 4.1, None]
     })
-
+    print(type(df))
     # Specify the content features to drop rows with missing values
     content_features = ['genres', 'directors']
 
@@ -52,7 +53,7 @@ def test_drop_rows_with_missing_values():
         'synopsis': ['Pew Pew', None],
         'rating': [4.9, None]
     })
-
+    print(type(expected_df))
     # Reset the indices so that they are aligned correctly before the comparison
     df_cleaned = df_cleaned.reset_index(drop=True)
     expected_df = expected_df.reset_index(drop=True)
@@ -61,6 +62,7 @@ def test_drop_rows_with_missing_values():
 
     # Assert that the number of rows has decreased
     assert len(df_cleaned) < len(df)
-    
+
+#pytest -vv preprocessing_test.py    
 # run pytest, 3 passed
 

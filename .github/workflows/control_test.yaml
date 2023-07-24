@@ -22,5 +22,17 @@ jobs:
         run: |
           pip install -r utils/requirements.txt
 
-      - name: Run Unit Tests
-        run: pytest
+      - name: Run data_management_test.py
+        run: pytest -vv data_management_test.py
+
+      - name: Run api_test.py
+        run: pytest -vv api_test.py
+
+      - name: Run preprocessing_test.py
+        run: pytest -vv preprocessing_test.py
+
+      - name: Run webscraping_test.py
+        run: pytest -vv webscraping_test.py
+
+      - name: Run modeling_test.py
+        run: pytest -vv modeling_test.py
