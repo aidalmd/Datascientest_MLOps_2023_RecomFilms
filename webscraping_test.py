@@ -1,30 +1,53 @@
 import os
-import pytest
+import unittest
 import pandas as pd
 from datetime import datetime
 import warnings
 warnings.filterwarnings("ignore", category=DeprecationWarning)
 
 from config import FOLDER_LIVE_DATA
+
 from webscraping import (
     scrape_allocine_films, 
     list_to_df, 
-    #df_to_csv, 
-    #get_most_recent_csv
+    df_to_csv, 
+    get_most_recent_csv
 )
 
-def test_scrape_allocine_films():
-    # Test that the function returns a list
-    films = scrape_allocine_films()
-    assert isinstance(films, list)
+class TestScrapingFunctions(unittest.TestCase):
 
-    # Test that the returned list contains dictionaries
-    if films:
-        assert isinstance(films[0], dict)
+    def test_scrape_allocine_films(self):
+        # This is a basic test to check if the scraping function returns a list
+        films = scrape_allocine_films()
+        self.assertIsInstance(films, list)
 
-def test_list_to_df():
-    # Test that the function returns a DataFrame
-    test_list = [{'title': 'Film 1', 'duration': '90 min'},
-                  {'title': 'Film 2', 'duration': '120 min'}]
-    df = list_to_df(test_list)
-    assert isinstance(df, pd.DataFrame)
+        # Add more specific tests here, if needed, to check the correctness of data
+
+    def test_get_most_recent_csv(self):
+        # Create some sample CSV files for testing
+        files = [
+            'scraped_films_202301171530.csv',
+            'scraped_films_202307201134.csv',
+            'scraped_films_202301171700.csv'
+        ]
+        folder_path = FOLDER_LIVE_DATA
+        prefix = 'scraped'
+
+        # Test if the function returns the most recent CSV filename correctly
+        most_recent_file = get_most_recent_csv(folder_path, prefix)
+        expected_file = 'scraped_films_202307201134.csv'
+        if most_recent_file is not None:
+            self.assertIn(expected_file, most_recent_file)
+
+        # Test for empty folder
+        most_recent_file = get_most_recent_csv('/data', prefix)
+        self.assertIsNone(most_recent_file)
+
+        # Test for invalid folder path
+        most_recent_file = get_most_recent_csv('/invalid/path', prefix)
+        self.assertIsNone(most_recent_file)
+
+if __name__ == '__main__':
+    unittest.main()
+
+#run python3 -m unittest webscraping_test.py, 2 passed

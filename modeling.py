@@ -13,8 +13,8 @@ from fuzzywuzzy import process
 from nltk.corpus import stopwords
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
-#nltk.download('stopwords')
 import nltk
+nltk.download('stopwords')
 from nltk.stem.porter import PorterStemmer
 
 from config import FOLDER_DATA

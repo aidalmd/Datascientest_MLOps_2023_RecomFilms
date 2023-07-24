@@ -28,7 +28,8 @@ def create_database(db_name: str):
 
 def create_table(db_name: str, 
                  table_name: str, 
-                 df, drop_table: bool=False):
+                 df: pd.DataFrame, 
+                 drop_table: bool=False):
     try:
         conn = mysql.connector.connect(
             host=HOST,

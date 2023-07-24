@@ -76,6 +76,8 @@ def scrape_allocine_films(base_url=URL) -> list:
 
 def list_to_df(List: list) -> pd.DataFrame:
     try:
+        if not isinstance(List, list):
+            raise ValueError("Input must be a list")
         df = pd.DataFrame(List)
         print("1. DataFrame successfully created.")
         return df
@@ -87,6 +89,7 @@ def df_to_csv(df: pd.DataFrame, filename: str):
     try:
         timestamp = datetime.now(pytz.timezone('Europe/Paris')).strftime("%Y%m%d%H%M")
         file_path = f'{FOLDER_LIVE_DATA}/{filename}_{timestamp}.csv'
+
         df.to_csv(file_path, index=False)
         print("2. CSV file successfully created.")
     except Exception as e:
@@ -120,7 +123,7 @@ if __name__ == "__main__":
     films = scrape_allocine_films(base_url=URL)
     df = list_to_df(films)
     # Creating a Dataframe of the scraped data e.g.: scrapped_films_YYYYMMHHMM.csv
-    df_to_csv(df, 'scrapped_films')
+    df_to_csv(df, 'scraped_films')
     # The most up to date scrapped csv version
     
-LIVE_SCRAPPED_TABLE = get_most_recent_csv(folder_path=f'{FOLDER_LIVE_DATA}', prefix="scrapped")
+LIVE_SCRAPPED_TABLE = get_most_recent_csv(folder_path=f'{FOLDER_LIVE_DATA}', prefix="scraped")

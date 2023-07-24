@@ -1,0 +1,26 @@
+To scrape, clean data for the model:
+1. python3 webscraping.py
+2. python3 preprocessing.py
+3. python3 data_management.py
+4. python3 modeling.py / uvicorn api:app
+
+Creating the database:
+data_management.py:
+Uncomment #create_database('recommendation')
+
+Creating the tables:
+create_table -> drop_table=True 
+
+Database connection:
+.env file: 
+./update_db_host.sh
+crontab -e
+0 * * * * /pathto/update_db_host.sh
+#TODO: fix the bash script
+
+MySQL workbench:
+you need to edit the connection and change the SSH hostname, MySQL Hostname to 
+the current IP address.
+
+api.py file: 
+uvicorn api:app --reload

@@ -58,3 +58,4 @@ if __name__ == "__main__":
     LIVE_PROCESSED_TABLE = df = drop_rows_with_missing_values(df, cfg['model']['content_features'])
     LIVE_PROCESSED_TABLE.to_csv(f'{FOLDER_DATA}/processed_films.csv', index=False)
 
+
