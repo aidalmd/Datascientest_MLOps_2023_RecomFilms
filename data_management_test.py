@@ -2,18 +2,15 @@ import pytest
 import mysql.connector
 import pandas as pd
 from unittest import mock
-from dotenv import dotenv_values
+
 from data_management import (
     create_database, 
     create_table, 
-    retrieve_data_from_server
-    )
-
-config = dotenv_values('.env')
-
-HOST = config['DB_HOST']
-USER = config['DB_USER']
-PASSWORD = config['DB_PASSWORD']
+    retrieve_data_from_server, 
+    HOST, 
+    USER,
+    PASSWORD
+)
 
 
 # Mocking the mysql.connector.connect method

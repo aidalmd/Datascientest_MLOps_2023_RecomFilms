@@ -8,9 +8,7 @@ warnings.filterwarnings("ignore", category=DeprecationWarning)
 from config import FOLDER_LIVE_DATA
 
 from webscraping import (
-    scrape_allocine_films, 
-    list_to_df, 
-    df_to_csv, 
+    scrape_allocine_films,  
     get_most_recent_csv
 )
 
@@ -46,8 +44,5 @@ class TestScrapingFunctions(unittest.TestCase):
         # Test for invalid folder path
         most_recent_file = get_most_recent_csv('/invalid/path', prefix)
         self.assertIsNone(most_recent_file)
-
-if __name__ == '__main__':
-    unittest.main()
 
 #run python3 -m unittest webscraping_test.py, 2 passed
