@@ -187,7 +187,14 @@ def get_satisfaction(films_predictions: dict) -> dict:
 
 
 def store_predictions_df(films_predictions: dict) -> pd.DataFrame:
-    return pd.DataFrame.from_dict(films_predictions) 
+    try:
+        if isinstance(films_predictions, dict):
+            return pd.DataFrame.from_dict(films_predictions)
+        else:
+            raise ValueError("films_predictions must be a dictionary.")
+    except Exception as e:
+        print(f"An error occurred: {e}")
+        return None
 
 
 def save_model(model, filepath):

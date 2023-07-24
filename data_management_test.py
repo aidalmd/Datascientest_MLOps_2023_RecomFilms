@@ -12,7 +12,6 @@ from data_management import (
     PASSWORD
 )
 
-
 # Mocking the mysql.connector.connect method
 @mock.patch('mysql.connector.connect')
 def test_create_database(mock_connect):

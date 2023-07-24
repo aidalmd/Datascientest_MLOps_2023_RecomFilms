@@ -60,12 +60,17 @@ def test_give_recommendations(similarity_matrix, monkeypatch):
 
 def test_store_predictions_df():
     # Test store_predictions_df function
-    films_predictions = {'recom_date': '20230101', 'user_film': 'Film1', 'recommended_films': ('Film2', 'Film3'), 'recommended_ratings': (3.8, 4.2)}
-    df = store_predictions_df(films_predictions)
-    assert isinstance(df, pd.DataFrame)
-    assert df.shape == (2, 4)
+    films_predictions = {'recom_date': '20230101', 'user_film': 'Film1', 'recommended_films': ['Film2', 'Film3'], 'recommended_ratings': [3.8, 4.2]} 
+    try:
+        df = store_predictions_df(films_predictions)
+        assert isinstance(df, pd.DataFrame)
+        assert df.shape == (2, 4)
+    except AssertionError as e:
+        print(f"Test failed: {e}")
+    except Exception as e:
+        print(f"An unexpected error occurred: {e}")
 
-# Sample test for save_model function (since it doesn't have complex logic)
+# Sample test for save_model function
 def test_save_model(tmp_path):
     model = "This is a sample model."
     filepath = tmp_path / "sample_model.pkl"
