@@ -23,7 +23,7 @@ jobs:
     - name: Build the Docker image
       run: | 
         docker build -t jira0325/Datascientest_MLOps_2023_RecomFilms:${GITHUB_SHA} .
-        docker tag  jira0325/Datascientest_MLOps_2023_RecomFilms:${GITHUB_SHA} fallewi/fast-api:latest
+        docker tag  jira0325/Datascientest_MLOps_2023_RecomFilms:${GITHUB_SHA} jira0325/Datascientest_MLOps_2023_RecomFilms:latest
         docker images
         docker run -d -p 80:80 --name fastapi jira0325/Datascientest_MLOps_2023_RecomFilms:${GITHUB_SHA}
         sleep 10
