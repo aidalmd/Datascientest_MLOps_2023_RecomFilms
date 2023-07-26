@@ -16,7 +16,6 @@ Database connection:
 ./update_db_host.sh
 crontab -e
 0 * * * * /pathto/update_db_host.sh
-#TODO: fix the bash script
 
 MySQL workbench:
 you need to edit the connection and change the SSH hostname, MySQL Hostname to 

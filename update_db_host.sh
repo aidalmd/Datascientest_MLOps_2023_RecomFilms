@@ -1,18 +1,18 @@
 #!/bin/bash
 
-# Fetch the current server IP address
-current_ip=$(hostname -I | awk '{print $1}')
+# Set the path to the SSH config file on Linux
+ssh_config_file="$HOME/.ssh/config"
 
-# Save the current IP address to a new file (e.g., server_ip.txt)
-echo "$current_ip" > server_ip.txt
+# Check if the SSH config file exists
+if [ ! -f "$ssh_config_file" ]; then
+  echo "SSH config file not found: $ssh_config_file"
+  exit 1
+fi
 
-# Fetch the SSH client IP address from the SSH_CONNECTION environment variable
-ssh_client_ip=$(echo $SSH_CONNECTION | awk '{print $1}')
-
-# Save the SSH client IP address to a new file (e.g., ssh_client_ip.txt)
-echo "$ssh_client_ip" > ssh_client_ip.txt
+# Fetch host entries from the config file and store them in ssh_client_hostname.txt
+target_host=$(grep -E '^Host ' "$ssh_config_file" | awk '{print $2}')
 
 # Update the .env file with the current IP address
-sed -i "s/^DB_HOST=.*/DB_HOST=\"$current_ip\"/" .env
+sed -i "s/^DB_HOST=.*/DB_HOST=\"$target_host\"/" .env
 
-echo "DB_HOST updated in .env file to $current_ip"
+echo "DB_HOST updated in .env file to $target_host"
