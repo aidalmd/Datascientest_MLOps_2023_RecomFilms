@@ -4,7 +4,7 @@ services:
     image: mysql:latest
     container_name: mysql_db
     environment:
-      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_ROOT_PASSWORD: admin1234
       MYSQL_DATABASE: recommendation
     volumes:
       - db_data:/var/lib/mysql
@@ -18,14 +18,27 @@ services:
       context: .
       dockerfile: Dockerfile.db
     container_name: data_management_app
-    restart: unless-stopped
     volumes:
-      - ./data:/app/data #TODO: check this
+      - ./data:/app/data # TODO: check
     environment:
-      DB_HOST: ${DB_HOST}
-      DB_USER: ${DB_USER}
-      DB_PASSWORD: ${DB_PASSWORD}
-    command: ["python", "data_management.py"]
+      DB_HOST: db
+      DB_USER: root
+      DB_PASSWORD: admin1234
+    command: ["python", "data_management.py"] # TODO: check if we're keeping it
 
+  api:
+    depends_on:
+      - app
+    build:
+      context: .
+      dockerfile: Dockerfile.api
+    container_name: recom_api
+    volumes:
+      - ./api:/app # to check
+    ports:
+      - "8080:8080"
+    env_file:
+      - ./.env
+# TODO: 3rd service: add an api service, port 8080: for use, connected to app, depending on it.
 volumes:
   db_data:

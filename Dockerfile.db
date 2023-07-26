@@ -1,11 +1,11 @@
-FROM python:3.8
+FROM python:3.8.10
 
 # Set the working directory in the container
 WORKDIR /app
 
-COPY utils/requirements.txt .
+COPY ./utils/requirements.txt .
 RUN pip install --upgrade pip
-RUN pip install --no-cache-dir --no-parallel -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy the data_management.py and .env files into the container
 COPY data_management.py .
@@ -13,10 +13,3 @@ COPY .env .
 
 # Run the data_management.py script
 CMD ["python3", "data_management.py"]
-
-
-#docker build -t data_management_image .
-#docker run data_management_image
-
-#docker-compose up -d
-#docker-compose down

@@ -1,19 +1,18 @@
-FROM python:3.8
+FROM python:3.8.10
 
+# Set the working directory in the container
 WORKDIR /app
 
-# Update the .env information
-ENV DATABASE_HOST=127.0.0.1
-ENV DB_USER="admin"
-ENV DB_PASSWORD="admin1234"
-ENV API_KEY_NAME = "admin"
-ENV API_KEY = "api1234"
-
+COPY ./utils/requirements.txt .
 RUN pip install --upgrade pip
-COPY ./api.py /app/api.py
-RUN pip install --no-cache-dir -r  requirements.txt
+RUN pip install --no-cache-dir -r utils/requirements.txt
+
+# Copy the data_management.py and .env files into the container
+COPY api .
+COPY .env .
 
 ENV PORT 8080
 EXPOSE 8080
 
-CMD ["uvicorn", "api:app", "--reload", "--host", "0.0.0.0", "--port", "8080"]
+# Run the api.py script
+CMD ["uvicorn", "api:app", "--host", "0.0.0.0", "--port", "8080"]

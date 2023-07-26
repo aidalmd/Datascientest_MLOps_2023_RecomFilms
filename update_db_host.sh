@@ -10,9 +10,9 @@ if [ ! -f "$ssh_config_file" ]; then
 fi
 
 # Fetch host entries from the config file and store them in ssh_client_hostname.txt
-target_host=$(grep -E '^Host ' "$ssh_config_file" | awk '{print $2}')
+ssh_host=$(grep -E '^Host ' "$ssh_config_file" | awk '{print $2}')
 
 # Update the .env file with the current IP address
-sed -i "s/^DB_HOST=.*/DB_HOST=\"$target_host\"/" .env
+sed -i "s/^SSH_HOSTNAME=.*/SSH_HOSTNAME=\"$ssh_host\"/" .env
 
-echo "DB_HOST updated in .env file to $target_host"
+echo "SSH_HOSTNAME updated in .env file to $ssh_host"
