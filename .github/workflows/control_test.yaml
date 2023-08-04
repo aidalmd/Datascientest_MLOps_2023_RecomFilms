@@ -66,11 +66,6 @@ jobs:
 
       - name: Run preprocessing.py
         run: python3 preprocessing.py
-      
-      - name: update the ssh host in .env
-        run: |
-          chmod +x update_ssh_host.sh
-          ./update_ssh_host.sh
 
       - name: Run data_management.py
         run: python3 data_management.py
