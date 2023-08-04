@@ -22,8 +22,6 @@ from data_management import (
     retrieve_data_from_server
 )
 
-# uvicorn api:app --reload
-
 config = dotenv_values('.env')
 
 HOST = config['SSH_HOSTNAME']

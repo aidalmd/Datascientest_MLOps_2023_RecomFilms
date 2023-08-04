@@ -1,18 +1,20 @@
 FROM python:3.8.10
 
+# Install uvicorn and other dependencies
+RUN pip install uvicorn fastapi
+
 # Set the working directory in the container
 WORKDIR /app
 
 COPY ./utils/requirements.txt .
 RUN pip install --upgrade pip
-RUN pip install --no-cache-dir -r utils/requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy the api.py in the api folder of the container
 # Copy .env files into the container, in root directory
-COPY api/api.py .
 COPY .env .
+COPY api.py .
 
-ENV PORT 8080
 EXPOSE 8080
 
 # Run the api.py script

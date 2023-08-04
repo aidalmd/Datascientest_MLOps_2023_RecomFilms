@@ -3,14 +3,14 @@ services:
   # Connection to the database
   db:
     image: mysql:latest
-    container_name: mysql_db
+    container_name: mysql_container
     environment:
       MYSQL_ROOT_PASSWORD: admin1234
       MYSQL_DATABASE: recommendation
     volumes:
       - ./data.sql:/docker-entrypoint-initdb.d/data.sql:ro
     ports:
-      - "3306:3306"
+      - "3307:3306"
 
   # Running the model    
   ml_model:
@@ -32,12 +32,13 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.api
-    container_name: recom_api
+    container_name: api_container
     volumes:
-      - ./api:/app # TODO: to check if this is the right thing to do
+      - ./api:/app
     ports:
       - "8080:8080"
     env_file:
       - ./.env
 volumes:
   db_data:
+# docker-compose build --no-cache

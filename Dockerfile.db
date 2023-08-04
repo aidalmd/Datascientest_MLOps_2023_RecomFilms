@@ -16,6 +16,3 @@ COPY data.sql /docker-entrypoint-initdb.d/
 
 # Expose the MySQL port
 EXPOSE 3306
-
-
-# Note: Create users table maybe if we don't use the dump.

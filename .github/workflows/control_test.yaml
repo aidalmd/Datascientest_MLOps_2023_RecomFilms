@@ -4,9 +4,16 @@ on:
     branches:
       - feat-aida
 
+env:
+  dockerhub_id: aidalmd
+  dockerhub_repository_ML: ml
+  dockerhub_repository_DB: mysql-mplops
+  dockerhub_repository_API: fastapi
+  dockerhub_latest: latest
+  
 jobs:
   test:
-    name: Run Unit Tests
+    name: run unit tests
     runs-on: ubuntu-20.04
 
     steps:
@@ -36,3 +43,110 @@ jobs:
 
       - name: Run modeling_test.py
         run: pytest -vv modeling_test.py
+
+  train:
+    name: train model
+    needs: test
+    runs-on: ubuntu-20.04
+
+    steps:
+      - name: Checkout on feat-aida
+        uses: actions/checkout@v2
+
+      - name: Set Up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: "3.8.10"
+
+      - name: Install Dependencies
+        run: pip install -r utils/requirements.txt
+      
+      - name: Run webscraping.py
+        run: python3 webscraping.py
+
+      - name: Run preprocessing.py
+        run: python3 preprocessing.py
+      
+      - name: update the ssh host in .env
+        run: |
+          chmod +x update_ssh_host.sh
+          ./update_ssh_host.sh
+
+      - name: Run data_management.py
+        run: python3 data_management.py
+
+      - name: Run modeling.py
+        run: python3 modeling.py
+
+        
+  build-push-container:
+    needs: train
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Build the Machine learning Docker image
+      run: | 
+        docker build -t $dockerhub_id/$dockerhub_repository_ML:${GITHUB_SHA} . 
+        docker tag  $dockerhub_id/$dockerhub_repository_ML:$GITHUB_SHA $dockerhub_id/$dockerhub_repository_ML:$dockerhub_latest
+
+      
+    - name: Build the Machine Mysql Docker image
+      run: | 
+        docker build -t $dockerhub_id/$dockerhub_repository_DB:${GITHUB_SHA} . 
+        docker tag  $dockerhub_id/$dockerhub_repository_DB:$GITHUB_SHA $dockerhub_id/$dockerhub_repository_DB:$dockerhub_latest
+
+
+    - name: Build the FastApi Docker image
+      run: | 
+        docker build -t $dockerhub_id/$dockerhub_repository_API:${GITHUB_SHA} . 
+        docker tag  $dockerhub_id/$dockerhub_repository_API:$GITHUB_SHA $dockerhub_id/$dockerhub_repository_API:$dockerhub_latest
+
+    - name: Run All Images
+      run: | 
+        docker-compose up -d
+        sleep 10
+        
+    - name: Test Every Micro service
+      run: | 
+        curl http://localhost:80
+        curl -X 'GET' \'http://127.0.0.1:8000/api/v1/films' \-H 'accept: application/json'
+        curl -X 'POST' \'http://127.0.0.1:8000/api/v1/recommendations' \-H 'accept: application/json' \-H 'Content-Type: application/json' \-d '{"title": "Avatar"}'
+
+        
+    - name: connect to Dockerhub
+      run: | 
+        docker login -u ${{ secrets.REGISTRY_USER  }} -p ${{ secrets.REGISTRY_PASSWD  }}
+          
+    - name: Push all images to Dockerhub
+      run: | 
+        docker push $dockerhub_id/$dockerhub_repository_ML:${GITHUB_SHA}
+        docker push $dockerhub_id/$dockerhub_repository_ML:$dockerhub_latest
+        
+        docker push $dockerhub_id/$dockerhub_repository_DB:${GITHUB_SHA}
+        docker push $dockerhub_id/$dockerhub_repository_DB:$dockerhub_latest
+        
+        docker push $dockerhub_id/$dockerhub_repository_API:${GITHUB_SHA}
+        docker push $dockerhub_id/$dockerhub_repository_API:$dockerhub_latest
+
+  deploy:
+    needs: build-push-container
+    name: deploy
+    runs-on: ubuntu-latest
+    steps:
+    - name: executing remote ssh commands using password
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.HOSTNAME  }}
+        username: ${{ secrets.USER_NAME  }}
+        key: ${{ secrets.AWS_PRIVATE_KEY  }}
+        port: 22
+        script: |
+          sudo docker rm -f $dockerhub_repository 
+          sudo docker rmi $dockerhub_id/$dockerhub_repository:$dockerhub_latest
+          sleep 10 
+          sudo docker run -d -p 9000:80 --name $dockerhub_repository $dockerhub_id/$dockerhub_repository:$dockerhub_latest
+          sudo docker ps 
+          sleep 10 
+          curl localhost:9000
+          ls 
+          sudo docker images
