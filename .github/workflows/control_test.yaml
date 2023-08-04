@@ -4,6 +4,13 @@ on:
     branches:
       - feat-aida
 
+env:
+  dockerhub_id: fallewi
+  dockerhub_repository_ML: ml
+  dockerhub_repository_DB: mysql-mplops
+  dockerhub_repository_API: fastapi
+  dockerhub_latest: latest
+  
 jobs:
   test:
     name: Run Unit Tests
@@ -61,16 +68,44 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
-    - name: Build the Docker image
+    - name: Build the Machine learning Docker image
       run: | 
-        docker build -t $dockerhub_id/$dockerhub_repository:${GITHUB_SHA} . 
-        docker tag  $dockerhub_id/$dockerhub_repository:$GITHUB_SHA $dockerhub_id/$dockerhub_repository:$dockerhub_latest
-        docker images
-        docker run -d -p 80:80 --name $dockerhub_repository $dockerhub_id/$dockerhub_repository:${GITHUB_SHA}
+        docker build -t $dockerhub_id/$dockerhub_repository_ML:${GITHUB_SHA} . 
+        docker tag  $dockerhub_id/$dockerhub_repository_ML:$GITHUB_SHA $dockerhub_id/$dockerhub_repository_ML:$dockerhub_latest
+
+      
+    - name: Build the Machine Mysql Docker image
+      run: | 
+        docker build -t $dockerhub_id/$dockerhub_repository_DB:${GITHUB_SHA} . 
+        docker tag  $dockerhub_id/$dockerhub_repository_DB:$GITHUB_SHA $dockerhub_id/$dockerhub_repository_DB:$dockerhub_latest
+
+
+    - name: Build the FastApi Docker image
+      run: | 
+        docker build -t $dockerhub_id/$dockerhub_repository_ML:${GITHUB_SHA} . 
+        docker tag  $dockerhub_id/$dockerhub_repository_ML:$GITHUB_SHA $dockerhub_id/$dockerhub_repository_ML:$dockerhub_latest
+
+    - name: Run All Images
+      run: | 
+        docker-compose -up -d
         sleep 10
+        
+    - name: Test Every Micro service
+      run: | 
+        curl http://localhost:80
+        
+    - name: connect to Dockerhub
+      run: | 
         docker login -u ${{ secrets.REGISTRY_USER  }} -p ${{ secrets.REGISTRY_PASSWD  }}
-        docker push $dockerhub_id/$dockerhub_repository:${GITHUB_SHA}
-        docker push $dockerhub_id/$dockerhub_repository:$dockerhub_latest
+          
+    - name: Push all images to Dockerhub
+      run: | 
+        docker push $dockerhub_id/$dockerhub_repository_ML:${GITHUB_SHA}
+        docker push $dockerhub_id/$dockerhub_repository_ML:$dockerhub_latest
+        docker push $dockerhub_id/$dockerhub_repository_Fastapi:${GITHUB_SHA}
+        docker push $dockerhub_id/$dockerhub_repository_Fastapi:$dockerhub_latest
+        docker push $dockerhub_id/$dockerhub_repository_mysql:${GITHUB_SHA}
+        docker push $dockerhub_id/$dockerhub_repository_mysql:$dockerhub_latest
 
   deploy:
     needs: build-push-container
