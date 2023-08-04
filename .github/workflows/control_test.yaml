@@ -39,6 +39,7 @@ jobs:
 
   train:
     name: train model
+    needs: test
     runs-on: ubuntu-20.04
 
     steps:
@@ -56,7 +57,7 @@ jobs:
 
         
   build-push-container:
-    needs: test
+    needs: train
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
