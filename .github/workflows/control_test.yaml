@@ -37,6 +37,24 @@ jobs:
       - name: Run modeling_test.py
         run: pytest -vv modeling_test.py
 
+  train:
+    name: train model
+    runs-on: ubuntu-20.04
+
+    steps:
+      - name: Checkout on feat-aida
+        uses: actions/checkout@v2
+
+      - name: Set Up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: "3.8.10"
+
+      - name: Install Dependencies
+        run: |
+          pip install -r utils/requirements.txt
+
+        
   build-push-container:
     needs: test
     runs-on: ubuntu-latest
