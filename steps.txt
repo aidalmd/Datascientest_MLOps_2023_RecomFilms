@@ -13,9 +13,10 @@ create_table -> drop_table=True
 
 Database connection:
 .env file: 
-./update_db_host.sh
+chmod +x update_ssh_host.sh
+./update_ssh_host.sh
 crontab -e
-0 * * * * /pathto/update_db_host.sh
+0 * * * * /pathto/update_ssh_host.sh
 
 MySQL workbench:
 you need to edit the connection and change the SSH hostname, MySQL Hostname to 

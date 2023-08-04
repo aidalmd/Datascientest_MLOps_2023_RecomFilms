@@ -34,7 +34,7 @@ services:
       dockerfile: Dockerfile.api
     container_name: recom_api
     volumes:
-      - ./api:/app # to check
+      - ./api:/app # TODO: to check
     ports:
       - "8080:8080"
     env_file:
