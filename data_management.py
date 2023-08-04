@@ -120,5 +120,3 @@ if __name__ == "__main__":
                 table_name='films', 
                 df=LIVE_PROCESSED_TABLE, 
                 drop_table=False) # TODO: change into True
-    
-# TODO: create users and predictions tables

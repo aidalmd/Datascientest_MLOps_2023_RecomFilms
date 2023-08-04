@@ -1,15 +1,21 @@
-FROM python:3.8.10
+FROM mysql:latest
 
-# Set the working directory in the container
 WORKDIR /app
 
 COPY ./utils/requirements.txt .
 RUN pip install --upgrade pip
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy the data_management.py and .env files into the container
-COPY data_management.py .
-COPY .env .
+ENV MYSQL_ROOT_PASSWORD=admin1234
+ENV MYSQL_DATABASE=recommendation
 
-# Run the data_management.py script
-CMD ["python3", "data_management.py"]
+#RUN mysqldump -u admin -p recommendation > data.sql
+
+# Copy the SQL dump file to /docker-entrypoint-initdb.d
+COPY data.sql /docker-entrypoint-initdb.d/
+
+# Expose the MySQL port
+EXPOSE 3306
+
+
+# Note: Create users table maybe if we don't use the dump.

@@ -1,0 +1,11 @@
+FROM python:3.8.10
+
+# Set the working directory in the container
+WORKDIR /app
+
+# Copy the ml model script and the pickle file into the container
+COPY modeling.py .
+COPY ./artifacts/model_artifact.pkl .
+
+# Run the machine learning model script
+CMD ["python3", "modeling.py"]

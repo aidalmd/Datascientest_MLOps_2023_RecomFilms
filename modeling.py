@@ -209,10 +209,11 @@ if __name__ == "__main__":
     os.makedirs(artifacts_folder, exist_ok=True)
     model_filepath = os.path.join(artifacts_folder, 'model_artifact.pkl')
     save_model(give_recommendations, model_filepath)
-
+    # TODO: change this test
     prediction = give_recommendations(df, film='Avatar',sim=similarity)
     if prediction is not None:
         df_predictions = store_predictions_df(prediction)
+        # Creating the table predictions
         create_table(db_name='recommendation', 
                 table_name='predictions', 
                 df=df_predictions, 

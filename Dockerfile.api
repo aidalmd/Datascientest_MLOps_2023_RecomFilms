@@ -7,8 +7,9 @@ COPY ./utils/requirements.txt .
 RUN pip install --upgrade pip
 RUN pip install --no-cache-dir -r utils/requirements.txt
 
-# Copy the data_management.py and .env files into the container
-COPY api .
+# Copy the api.py in the api folder of the container
+# Copy .env files into the container, in root directory
+COPY api/api.py .
 COPY .env .
 
 ENV PORT 8080
