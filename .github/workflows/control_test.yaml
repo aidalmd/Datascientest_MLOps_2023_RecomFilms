@@ -103,9 +103,7 @@ jobs:
         
     - name: Test Every Micro service
       run: |
-        docker exec -it api_container curl http://localhost:8000/docs#/
-        docker exec -it api_container curl -X GET -u admin:admin http://localhost:8000/api/v1/films
-        docker exec -it api_container curl -X GET -u aida:password1234 http://localhost:8000/users/me
+        curl -X 'POST' 'http://localhost:8000/api/v1/recommendations' -H 'accept: application/json' -H 'Authorization: Basic YWRtaW46YWRtaW4=' -H 'Content-Type: application/json' -d '{"title": "Coco"}'
 
         
     - name: connect to Dockerhub
