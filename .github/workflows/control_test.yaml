@@ -103,9 +103,9 @@ jobs:
         
     - name: Test Every Micro service
       run: |
-        curl http://localhost:8000/docs#/
-        curl -X GET -u admin:admin http://localhost:8000/api/v1/films
-        curl -X GET -u aida:password1234 http://localhost:8000/users/me
+        docker exec -it api_container curl http://localhost:8000/docs#/
+        docker exec -it api_container curl -X GET -u admin:admin http://localhost:8000/api/v1/films
+        docker exec -it api_container curl -X GET -u aida:password1234 http://localhost:8000/users/me
 
         
     - name: connect to Dockerhub
