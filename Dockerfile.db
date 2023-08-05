@@ -2,8 +2,9 @@ FROM python:3.8.10
 
 WORKDIR /app
 
-COPY ./utils/requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+# Copy the python dependency requirements file from utils folder into the containers working directory
+COPY ./utils/requirements.txt utils/
+RUN pip install --no-cache-dir -r ./utils/requirements.txt
 
 ENV MYSQL_ROOT_PASSWORD=admin1234
 ENV MYSQL_DATABASE=recommendation
