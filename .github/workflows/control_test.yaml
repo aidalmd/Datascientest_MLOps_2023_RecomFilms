@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - feat-aida
+      - test2
 
 env:
   dockerhub_id: aidalmd
