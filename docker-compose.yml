@@ -41,4 +41,3 @@ services:
       - ./.env
 volumes:
   db_data:
-# docker-compose build --no-cache
