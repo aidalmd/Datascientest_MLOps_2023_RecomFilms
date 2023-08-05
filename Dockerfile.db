@@ -3,7 +3,6 @@ FROM mysql:latest
 WORKDIR /app
 
 COPY ./utils/requirements.txt .
-RUN pip install --upgrade pip
 RUN pip install --no-cache-dir -r requirements.txt
 
 ENV MYSQL_ROOT_PASSWORD=admin1234
