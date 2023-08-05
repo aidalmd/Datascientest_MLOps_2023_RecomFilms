@@ -14,7 +14,7 @@ from nltk.corpus import stopwords
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 import nltk
-#nltk.download('stopwords')
+nltk.download('stopwords')
 from nltk.stem.porter import PorterStemmer
 
 from config import FOLDER_DATA
@@ -174,7 +174,7 @@ if __name__ == "__main__":
     model_filepath = os.path.join(artifacts_folder, 'model_artifact.pkl')
     save_model(give_recommendations, model_filepath)
     # TODO: change this test
-    prediction = give_recommendations(df, film='Avatar',sim=similarity)
+    prediction = give_recommendations(df, film='Coco',sim=similarity)
     if prediction is not None:
         df_predictions = store_predictions_df(prediction)
         # Creating the table predictions

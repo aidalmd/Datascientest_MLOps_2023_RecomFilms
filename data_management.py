@@ -119,4 +119,4 @@ if __name__ == "__main__":
     create_table(db_name='recommendation', 
                 table_name='films', 
                 df=LIVE_PROCESSED_TABLE, 
-                drop_table=True) # TODO: change into True
+                drop_table=False) # TODO: change into True
