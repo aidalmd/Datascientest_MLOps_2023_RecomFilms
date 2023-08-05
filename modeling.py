@@ -14,7 +14,7 @@ from nltk.corpus import stopwords
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 import nltk
-nltk.download('stopwords')
+#nltk.download('stopwords')
 from nltk.stem.porter import PorterStemmer
 
 from config import FOLDER_DATA
@@ -104,26 +104,6 @@ def prepare_data_model(df:pd.DataFrame, cfg):
     
     return similarity
 
-
-def get_closest_film_title(film: str):
-    film_titles = df['title'].tolist()
-    suggestion = process.extractOne(film, film_titles)
-    
-    if suggestion:
-        closest_title, score = suggestion
-        if score > 70:  # Set a threshold for similarity score
-            return closest_title
-    return None
-
-@function_timer
-def suggest_film(film: str):
-    suggestion = get_closest_film_title(film)
-    if suggestion:
-        user_input = input(f"Did you mean to type '{suggestion}'? (Y/N): ")
-        if user_input.lower() == 'y' or user_input.strip() == '':
-            return suggestion
-    return None
-
 @function_timer
 def give_recommendations(df: pd.DataFrame, film: str, sim=np.array):
     film_index = df[df['title'] == film].index
@@ -169,22 +149,6 @@ def give_recommendations(df: pd.DataFrame, film: str, sim=np.array):
     }
     return films_predictions
 
-def get_satisfaction(films_predictions: dict) -> dict:
-    try:
-        while True:
-            satisfaction = input("Was the recommendation satisfying? (Y/N): ").strip().upper()
-            if satisfaction in ('Y', 'N'):
-                films_predictions['satisfaction'] = satisfaction
-                break
-            else:
-                print("Invalid input. Please enter 'Y' or 'N'.")
-
-    except Exception as e:
-        print(f"An error occurred: {str(e)}")
-        return films_predictions
-
-    return films_predictions
-
 
 def store_predictions_df(films_predictions: dict) -> pd.DataFrame:
     try:
@@ -220,5 +184,4 @@ if __name__ == "__main__":
                 drop_table=False)
     else:
         print("No film recommendations available.")
-    
 

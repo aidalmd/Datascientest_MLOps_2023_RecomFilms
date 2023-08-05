@@ -8,7 +8,8 @@ COPY ./utils/requirements.txt utils/
 RUN pip install --no-cache-dir -r ./utils/requirements.txt
 
 # Copy the required files into the container
-COPY . .
+COPY . . 
+# Do I need to if I already have it ? But since it doesn't depend on it, I think I do need it
 
 # Run the machine learning model script
 CMD ["python3", "modeling.py"]

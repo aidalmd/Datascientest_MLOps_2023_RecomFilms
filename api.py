@@ -209,5 +209,3 @@ def recommend_films(film: Film):
           dependencies=[Depends(get_current_user)])
 def predictions(film: Film):
     return get_recommendations(film, output=2)
-
-# I have to rethink the two final functions cuz both of them store scores and title
