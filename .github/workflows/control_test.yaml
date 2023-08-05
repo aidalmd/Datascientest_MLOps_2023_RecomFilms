@@ -104,7 +104,7 @@ jobs:
         
     - name: Test Every Micro service
       run: | 
-        curl 'http://localhost:8080/api/v1/films' -v
+        curl 'http://localhost:8080/api/v1/films'
         curl 'http://localhost:8080/api/v1/recommendations' -H 'accept: application/json' -H 'Content-Type: application/json' -d '{"title": "Avatar"}'
 
         
