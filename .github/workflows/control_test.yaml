@@ -66,11 +66,6 @@ jobs:
 
       - name: Run preprocessing.py
         run: python3 preprocessing.py
-      
-      - name: update the ssh host in .env
-        run: |
-          chmod +x update_ssh_host.sh
-          ./update_ssh_host.sh
 
       - name: Run data_management.py
         run: python3 data_management.py
@@ -86,19 +81,19 @@ jobs:
     - uses: actions/checkout@v3
     - name: Build the Machine learning Docker image
       run: | 
-        docker build -t $dockerhub_id/$dockerhub_repository_ML:${GITHUB_SHA} . 
+        docker build -f Dockerfile.model -t $dockerhub_id/$dockerhub_repository_ML:${GITHUB_SHA} . 
         docker tag  $dockerhub_id/$dockerhub_repository_ML:$GITHUB_SHA $dockerhub_id/$dockerhub_repository_ML:$dockerhub_latest
 
       
     - name: Build the Machine Mysql Docker image
       run: | 
-        docker build -t $dockerhub_id/$dockerhub_repository_DB:${GITHUB_SHA} . 
+        docker build -f Dockerfile.db -t $dockerhub_id/$dockerhub_repository_DB:${GITHUB_SHA} . 
         docker tag  $dockerhub_id/$dockerhub_repository_DB:$GITHUB_SHA $dockerhub_id/$dockerhub_repository_DB:$dockerhub_latest
 
 
     - name: Build the FastApi Docker image
       run: | 
-        docker build -t $dockerhub_id/$dockerhub_repository_API:${GITHUB_SHA} . 
+        docker build -f Dockerfile.api -t $dockerhub_id/$dockerhub_repository_API:${GITHUB_SHA} . 
         docker tag  $dockerhub_id/$dockerhub_repository_API:$GITHUB_SHA $dockerhub_id/$dockerhub_repository_API:$dockerhub_latest
 
     - name: Run All Images
