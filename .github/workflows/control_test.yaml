@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - feat-aida
+      - test_wassim_on_feat_aida
 
 env:
   dockerhub_id: aidalmd
@@ -103,8 +104,8 @@ jobs:
         
     - name: Test Every Micro service
       run: | 
-        curl 'http://127.0.0.1:8000/api/v1/films' -v
-        curl 'http://127.0.0.1:8000/api/v1/recommendations' -H 'accept: application/json' -H 'Content-Type: application/json' -d '{"title": "Avatar"}'
+        curl 'http://localhost:8000/api/v1/films' -v
+        curl 'http://localhost:8000/api/v1/recommendations' -H 'accept: application/json' -H 'Content-Type: application/json' -d '{"title": "Avatar"}'
 
         
     - name: connect to Dockerhub
