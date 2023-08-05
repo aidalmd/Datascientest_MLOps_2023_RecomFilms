@@ -108,7 +108,7 @@ jobs:
         
     - name: connect to Dockerhub
       run: | 
-        docker login -u ${{ secrets.REGISTRY_USER  }} -p ${{ secrets.REGISTRY_PASSWD  }}
+        sudo docker login -u ${{ secrets.REGISTRY_USER  }} -p ${{ secrets.REGISTRY_PASSWD  }}
           
     - name: Push all images to Dockerhub
       run: | 
