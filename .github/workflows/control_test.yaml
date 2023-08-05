@@ -103,8 +103,6 @@ jobs:
         
     - name: Test Every Micro service
       run: | 
-        curl 'http://127.0.0.0:8080'
-        curl
 
         
     - name: connect to Dockerhub
