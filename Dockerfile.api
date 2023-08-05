@@ -14,6 +14,8 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy .env files into the container, in root directory
 COPY .env /app
 COPY api.py /app
+COPY modeling.py /app
+COPY data_management.py / app
 
 EXPOSE 8080
 
