@@ -113,7 +113,7 @@ def retrieve_data_from_server(db_name: str, table_name: str) -> pd.DataFrame:
 
 if __name__ == "__main__":
     # Uncomment the following line to create the 'recommendation' database
-    #create_database('recommendation')
+    create_database('recommendation')
     LIVE_PROCESSED_TABLE = pd.read_csv('data/processed_films.csv')
     # Call the function to create the table and insert data
     create_table(db_name='recommendation', 
