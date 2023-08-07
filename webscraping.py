@@ -4,8 +4,11 @@ import pandas as pd
 import pytz
 from datetime import datetime
 from bs4 import BeautifulSoup as bs
+from dotenv import dotenv_values
 
-from config import URL, FOLDER_LIVE_DATA
+config = dotenv_values('.env')
+URL = config['URL']
+FOLDER_LIVE_DATA = config['FOLDER_LIVE_DATA']
 
 def scrape_allocine_films(base_url=URL) -> list:
     """

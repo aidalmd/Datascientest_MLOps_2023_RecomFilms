@@ -25,7 +25,6 @@ from data_management import (
 config = dotenv_values('.env')
 
 HOST = config['SSH_HOSTNAME']
-#HOST = config['DB_HOST']
 USER = config['DB_USER']
 PASSWORD = config['DB_PASSWORD']
 API_KEY_NAME = config['API_KEY_NAME']

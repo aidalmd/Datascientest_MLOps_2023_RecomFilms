@@ -19,8 +19,7 @@ crontab -e
 0 * * * * /pathto/update_ssh_host.sh
 
 MySQL workbench:
-you need to edit the connection and change the SSH hostname, MySQL Hostname to 
-the current IP address.
+you need to edit the connection and change the SSH hostname, MySQL Hostname to the current IP address.
 
 api.py file: 
 uvicorn api:app --reload

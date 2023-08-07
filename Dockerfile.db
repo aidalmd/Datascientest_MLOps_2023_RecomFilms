@@ -9,6 +9,7 @@ RUN pip install --no-cache-dir -r ./utils/requirements.txt
 ENV MYSQL_ROOT_PASSWORD=admin1234
 ENV MYSQL_DATABASE=recommendation
 
+#RUN mysqldump -u admin -p"$MYSQL_ROOT_PASSWORD" "$MYSQL_DATABASE" > data.sql
 #RUN mysqldump -u admin -p recommendation > data.sql
 
 # Copy the SQL dump file to /docker-entrypoint-initdb.d

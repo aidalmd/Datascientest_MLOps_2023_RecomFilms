@@ -1,8 +1,14 @@
 import pandas as pd
 import re
 import yaml
-from config import FOLDER_DATA
-from webscraping import LIVE_SCRAPPED_TABLE
+
+from dotenv import dotenv_values
+from webscraping import (
+    LIVE_SCRAPPED_TABLE
+)
+
+config = dotenv_values('.env')
+FOLDER_DATA = config['FOLDER_DATA']
 
 # The most up to date scrapped csv version is used
 df = pd.read_csv(f'{FOLDER_DATA}/{LIVE_SCRAPPED_TABLE}') if LIVE_SCRAPPED_TABLE else None

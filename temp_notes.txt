@@ -22,5 +22,5 @@ nltk.download('stopwords')
 # modeling.py
 pip3 install unidecode
 
-# script_mysql.py
+# data_management.py
 pip install mysql-connector-python

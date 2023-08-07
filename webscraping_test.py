@@ -4,8 +4,11 @@ import pandas as pd
 from datetime import datetime
 import warnings
 warnings.filterwarnings("ignore", category=DeprecationWarning)
+from dotenv import dotenv_values
 
-from config import FOLDER_LIVE_DATA
+config = dotenv_values('.env')
+
+FOLDER_LIVE_DATA = config['FOLDER_LIVE_DATA']
 
 from webscraping import (
     scrape_allocine_films,  

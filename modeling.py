@@ -17,7 +17,6 @@ import nltk
 nltk.download('stopwords')
 from nltk.stem.porter import PorterStemmer
 
-from config import FOLDER_DATA
 from data_management import (
     create_table,
     retrieve_data_from_server
