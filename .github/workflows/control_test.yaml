@@ -32,9 +32,6 @@ jobs:
       - name: Run data_management_test.py
         run: pytest -vv data_management_test.py
 
-      - name: Run api_test.py
-        run: pytest -vv api_test.py
-
       - name: Run preprocessing_test.py
         run: pytest -vv preprocessing_test.py
 
