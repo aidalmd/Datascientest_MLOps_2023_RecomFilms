@@ -147,7 +147,7 @@ jobs:
         username: ${{ secrets.USER_NAME  }}
         key: ${{ secrets.AWS_PRIVATE_KEY  }}
         port: 22
-        source: "docker-compose.yml"
+        source: "docker-compose.yml,.env"
         target: /home/ubuntu/docker-compose/
         
   deploy:
@@ -164,7 +164,7 @@ jobs:
         port: 22
         script: |
           docker rm -f test-mysql
-          docker-compose -f /home/ubuntu/docker-compose/docker-compose.yml down
+          cd docker-compose down
           docker rm -f $(docker ps -a -q)
           docker rmi -f $(docker images)
-          docker-compose up -f /home/ubuntu/docker-compose/docker-compose.yml -d
+          docker-compose up -d
