@@ -12,10 +12,26 @@ env:
   dockerhub_latest: latest
   
 jobs:
+
+  create-env:
+    runs-on: ubuntu-latest
+    steps:
+    - name: deploy Machine Learning model , Api and Database
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.HOSTNAME  }}
+        username: ${{ secrets.USER_NAME  }}
+        key: ${{ secrets.AWS_PRIVATE_KEY  }}
+        port: 22
+        script: |
+           docker rm -f test-mysql
+           docker run --name test-mysql -p 3306:3306 -e MYSQL_ROOT_PASSWORD=Admin1234. -d mysql
+
+
   test:
     name: run unit tests
     runs-on: ubuntu-20.04
-
+    needs: create-env
     steps:
       - name: Checkout on feat-aida
         uses: actions/checkout@v2
