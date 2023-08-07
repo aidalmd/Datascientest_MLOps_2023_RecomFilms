@@ -16,7 +16,7 @@ jobs:
   create-env:
     runs-on: ubuntu-latest
     steps:
-    - name: deploy Machine Learning model , Api and Database
+    - name: create Mysql Database for test environment
       uses: appleboy/ssh-action@master
       with:
         host: ${{ secrets.HOSTNAME  }}
@@ -162,6 +162,7 @@ jobs:
         key: ${{ secrets.AWS_PRIVATE_KEY  }}
         port: 22
         script: |
+          docker rm -f test-mysql
           docker-compose down
           docker rm -f $(docker ps -a -q)
           docker rmi -f $(docker images)
