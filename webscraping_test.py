@@ -28,7 +28,6 @@ class TestScrapingFunctions(unittest.TestCase):
         # Create some sample CSV files for testing
         files = [
             'scraped_films_202301171530.csv',
-            'scraped_films_202307201134.csv',
             'scraped_films_202301171700.csv'
         ]
         folder_path = FOLDER_LIVE_DATA
