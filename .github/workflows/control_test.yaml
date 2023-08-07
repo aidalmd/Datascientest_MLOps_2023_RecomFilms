@@ -165,8 +165,6 @@ jobs:
         script: |
           docker rm -f test-mysql
           cd docker-compose/
-          mv artifacts/docker-compose.yml .
           docker-compose down
-          docker rm -f $(docker ps -a -q)
-          docker rmi -f $(docker images)
+          docker rmi  $(docker images)
           docker-compose up -d
