@@ -148,7 +148,7 @@ jobs:
         key: ${{ secrets.AWS_PRIVATE_KEY  }}
         port: 22
         source: "docker-compose.yml"
-        target: /home/ec2-user/
+        target: /home/ubuntu/docker-compose/
         
   deploy:
     needs: copy_docker-compose
@@ -164,7 +164,7 @@ jobs:
         port: 22
         script: |
           docker rm -f test-mysql
-          docker-compose down
+          docker-compose -f /home/ubuntu/docker-compose/docker-compose.yml down
           docker rm -f $(docker ps -a -q)
           docker rmi -f $(docker images)
-          docker-compose up -d
+          docker-compose up -f /home/ubuntu/docker-compose/docker-compose.yml -d
