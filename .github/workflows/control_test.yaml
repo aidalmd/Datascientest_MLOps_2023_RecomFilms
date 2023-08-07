@@ -147,7 +147,7 @@ jobs:
         username: ${{ secrets.USER_NAME  }}
         key: ${{ secrets.AWS_PRIVATE_KEY  }}
         port: 22
-        source: "artifacts/docker-compose.yml,.env"
+        source: "artifacts/docker-compose.yml,.env,data.sql,modeling.py"
         target: /home/ubuntu/docker-compose/
         
   deploy:
@@ -164,8 +164,8 @@ jobs:
         port: 22
         script: |
           docker rm -f test-mysql
-          cd docker-compose/artifacts/ 
-          cp ../.env .
+          cd docker-compose/
+          mv artifacts/docker-compose.yml .
           docker-compose down
           docker rm -f $(docker ps -a -q)
           docker rmi -f $(docker images)
