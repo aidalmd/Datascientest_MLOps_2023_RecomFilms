@@ -1,0 +1,39 @@
+version: '3'
+services:
+  # Connection to the database
+  db:
+    image: aidalmd/mysql-mplops:latest
+    container_name: mysql_container
+    environment:
+      MYSQL_ROOT_PASSWORD: admin1234
+      MYSQL_DATABASE: recommendation
+    volumes:
+      - ./data.sql:/docker-entrypoint-initdb.d/data.sql:ro
+    ports:
+      - "3307:3306"
+
+  # Running the model    
+  ml_model:
+    image: aidalmd/ml:latest
+    depends_on:
+      - db # Retrieves the data for films through the database
+    container_name: model_container
+    volumes:
+      - ./modeling.py:/app/modeling.py
+    env_file:
+      - ./.env
+
+  # For the FastAPI code
+  fastapi:
+    depends_on:
+      - db
+    image: aidalmd/fastapi:latest
+    container_name: api_container
+    volumes:
+      - .:/app  # Map current directory to /app in the container
+    ports:
+      - "8080:8000"
+    env_file:
+      - ./.env
+volumes:
+  db_data:
