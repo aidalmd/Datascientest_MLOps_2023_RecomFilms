@@ -134,7 +134,7 @@ jobs:
         key: ${{ secrets.AWS_PRIVATE_KEY  }}
         port: 22
         source: "docker-compose.yml"
-        target: /home/ubuntu/
+        target: /home/ec2-user/
         
   deploy:
     needs: copy_docker-compose
