@@ -164,7 +164,8 @@ jobs:
         port: 22
         script: |
           docker rm -f test-mysql
-          cd docker-compose down
+          cd docker-compose 
+          docker-compose down
           docker rm -f $(docker ps -a -q)
           docker rmi -f $(docker images)
           docker-compose up -d
