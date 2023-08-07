@@ -147,7 +147,7 @@ jobs:
         username: ${{ secrets.USER_NAME  }}
         key: ${{ secrets.AWS_PRIVATE_KEY  }}
         port: 22
-        source: "artifacts/docker-compose.yml,.env,data.sql,modeling.py"
+        source: "docker-compose.yml,.env,data.sql,modeling.py,Dockerfile.api,Dockerfile.db,Dockerfile.model"
         target: /home/ubuntu/docker-compose/
         
   deploy:
