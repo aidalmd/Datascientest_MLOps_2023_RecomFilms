@@ -38,7 +38,7 @@ services:
     ports:
       - "8080:8000"
     environment:
-      - HOSTNAME: db
+      - SSH_HOSTNAME: db
     env_file:
       - ./.env
 volumes:
