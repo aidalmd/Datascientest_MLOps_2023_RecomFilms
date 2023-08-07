@@ -16,7 +16,7 @@ jobs:
   create-env:
     runs-on: ubuntu-latest
     steps:
-    - name: create Mysql Database for test environment
+    - name: create Mysql Database for test environment and delete docker-compose.yml
       uses: appleboy/ssh-action@master
       with:
         host: ${{ secrets.HOSTNAME  }}
@@ -24,6 +24,7 @@ jobs:
         key: ${{ secrets.AWS_PRIVATE_KEY  }}
         port: 22
         script: |
+           rm -Rf docker-compose.yml
            docker rm -f test-mysql
            docker run --name test-mysql -p 3306:3306 -e MYSQL_ROOT_PASSWORD=Admin1234. -d mysql
 
