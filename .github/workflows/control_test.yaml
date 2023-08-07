@@ -121,12 +121,28 @@ jobs:
         docker push $dockerhub_id/$dockerhub_repository_API:${GITHUB_SHA}
         docker push $dockerhub_id/$dockerhub_repository_API:$dockerhub_latest
 
-  deploy:
+  copy_docker-compose:
     needs: build-push-container
+    name: copy docker-compose to prod server
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: copy file via ssh password
+      uses: appleboy/scp-action@v0.1.4
+      with:
+        host: ${{ secrets.HOSTNAME  }}
+        username: ${{ secrets.USER_NAME  }}
+        key: ${{ secrets.AWS_PRIVATE_KEY  }}
+        port: 22
+        source: "docker-compose.yml"
+        target: /home/ubuntu/
+        
+  deploy:
+    needs: copy_docker-compose
     name: deploy
     runs-on: ubuntu-latest
     steps:
-    - name: executing remote ssh commands using password
+    - name: deploy Machine Learning model , Api and Database
       uses: appleboy/ssh-action@master
       with:
         host: ${{ secrets.HOSTNAME  }}
@@ -134,12 +150,7 @@ jobs:
         key: ${{ secrets.AWS_PRIVATE_KEY  }}
         port: 22
         script: |
-          sudo docker rm -f $dockerhub_repository 
-          sudo docker rmi $dockerhub_id/$dockerhub_repository:$dockerhub_latest
-          sleep 10 
-          sudo docker run -d -p 9000:80 --name $dockerhub_repository $dockerhub_id/$dockerhub_repository:$dockerhub_latest
-          sudo docker ps 
-          sleep 10 
-          curl localhost:9000
-          ls 
-          sudo docker images
+          docker-compose down
+          docker rm -f $(docker ps -a -q)
+          docker rmi -f $(docker images)
+          docker-compose up -d
