@@ -2,7 +2,7 @@ name: Continuous Integration
 on:
   push:
     branches:
-      - feat-aida
+      - release_aida
 
 env:
   dockerhub_id: aidalmd
