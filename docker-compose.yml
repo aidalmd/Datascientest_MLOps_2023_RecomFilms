@@ -37,6 +37,8 @@ services:
       - .:/app  # Map current directory to /app in the container
     ports:
       - "8080:8000"
+    environment:
+      - HOSTNAME: db
     env_file:
       - ./.env
 volumes:
